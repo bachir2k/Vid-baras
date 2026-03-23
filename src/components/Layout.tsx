@@ -8,9 +8,10 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 
   const navigation = [
     { name: 'Accueil', path: '/' },
-    { name: 'Videbarras team', path: '/services' },
-    { name: 'Service', path: '/about' },
+    { name: 'Videbarras team', path: '/about' },
+    { name: 'Service', path: '/services' },
     { name: 'Contact', path: '/contact' },
+    { name: 'FAQ', path: '/faq' },
   ];
 
   const isActive = (path: string) => location.pathname === path;
