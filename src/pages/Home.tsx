@@ -263,7 +263,7 @@ export default function Home() {
           ],
         }}
       />
-      <section className="relative min-h-screen flex items-center py-32 px-4 sm:px-6 lg:px-8">
+      <section className="relative min-h-[700px] flex items-center py-32 px-4 sm:px-6 lg:px-8">
         <div
           className="absolute inset-0 z-0"
           style={{
