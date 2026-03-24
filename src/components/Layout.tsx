@@ -20,16 +20,16 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     <div className="min-h-screen bg-white">
       <header className="fixed top-0 w-full bg-white/95 backdrop-blur-sm z-50 border-b border-gray-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center py-6">
+          <div className="flex justify-between items-center py-3">
             <Link to="/" className="flex items-center">
               <img
-                src="/6b7446e4-b35e-4e7e-b4db-01e0f19a1e26.png"
+                src="/debara.png"
                 alt="Vidébarras"
-                className="h-12 w-auto"
+                className="h-16 md:h-16 w-auto"
               />
             </Link>
 
-            <nav className="hidden md:flex items-center space-x-12">
+            <nav className="hidden md:flex items-center justify-center space-x-12">
               {navigation.map((item) => (
                 <Link
                   key={item.path}
