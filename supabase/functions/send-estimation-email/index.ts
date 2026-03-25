@@ -16,7 +16,7 @@ serve(async (req) => {
       throw new Error('RESEND_API_KEY is not set')
     }
 
-    const { email, name, service_type, estimated_price } = await req.json()
+    const { email, name, service_type, estimated_price, surface } = await req.json()
 
     // Envoi de l'email au client
     const res = await fetch('https://api.resend.com/emails', {
@@ -26,15 +26,15 @@ serve(async (req) => {
         Authorization: `Bearer ${resendApiKey}`,
       },
       body: JSON.stringify({
-        from: 'Vidébarras <Contact@vidédarras.fr>', // TODO: Assurez-vous que ce domaine est vérifié sur Resend
+        from: 'Vidébarras <contact@xn--vidbarras-d4a.fr>', // Punycode pour vidébarras.fr
         to: [email],
-        reply_to: 'contact@vidédarras.fr',
+        reply_to: 'contact@xn--vidbarras-d4a.fr',
         subject: `Récapitulatif de votre estimation pour un débarras (${service_type})`,
         html: `
           <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #eee; border-radius: 10px;">
             <h1 style="color: #2563eb;">Bonjour ${name},</h1>
             <p>Merci d'avoir utilisé notre simulateur d'estimation sur <strong>Vidébarras</strong>.</p>
-            <p>Vous avez demandé une estimation pour un débarras de type : <strong>${service_type}</strong>.</p>
+            <p>Vous avez demandé une estimation pour un débarras de type : <strong>${service_type}</strong>. de ${s} m²</p>
             <div style="background-color: #eff6ff; padding: 20px; border-radius: 8px; text-align: center; margin: 20px 0;">
               <p style="margin: 0; color: #1e40af; font-size: 14px;">Estimation indicative</p>
               <p style="margin: 10px 0 0 0; color: #2563eb; font-size: 32px; font-weight: bold;">${estimated_price}</p>
@@ -44,8 +44,8 @@ serve(async (req) => {
             <hr style="border: none; border-top: 1px solid #eee; margin: 20px 0;"/>
             <p style="font-size: 12px; color: #666;">
               Cordialement,<br/>
-              L'unité Vidébarras<br/>
-              <a href="https://vidédarras.fr" style="color: #2563eb; text-decoration: none;">www.vidédarras.fr</a>
+              L'équipe Vidébarras<br/>
+              <a href="https://xn--vidbarras-d4a.fr" style="color: #2563eb; text-decoration: none;">www.vidébarras.fr</a>
             </p>
           </div>
         `,

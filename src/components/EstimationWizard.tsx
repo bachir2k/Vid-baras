@@ -162,7 +162,8 @@ export default function EstimationWizard() {
 
       if (functionError) {
         console.error('Erreur lors de l\'envoi de l\'email:', functionError);
-        // On log l'erreur mais on ne bloque pas l'utilisateur car sa demande est déjà en base
+        const errorMsg = functionError instanceof Error ? functionError.message : JSON.stringify(functionError);
+        alert('Demande reçue, mais erreur d\'envoi d\'email. \n\nCause possible : domaine Resend non vérifié ou erreur de configuration. \n\nDétails techniques : ' + errorMsg);
       }
 
       setIsSubmitted(true);
