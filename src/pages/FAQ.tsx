@@ -147,7 +147,7 @@ export default function FAQ() {
                     return (
                       <div
                         key={globalIndex}
-                        className="bg-white rounded-xl border border-gray-200 hover:border-primary/30 transition-all shadow-sm hover:shadow-md"
+                        className="bg-white rounded-xl border border-gray-200 hover:border-primary/30  transition-all shadow-sm hover:shadow-md"
                       >
                         <button
                           onClick={() => toggleFAQ(globalIndex)}
@@ -196,10 +196,10 @@ export default function FAQ() {
               Demander un devis gratuit
             </Link>
             <a
-              href="tel:+33769181264"
+              href="tel:+33695257352"
               className="inline-flex items-center justify-center px-8 py-4 text-lg font-semibold text-white bg-white/10 hover:bg-white/20 transition-colors rounded-lg border-2 border-white/30"
             >
-              07 69 18 12 64
+              06 95 25 73 52
             </a>
           </div>
         </div>

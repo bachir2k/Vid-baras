@@ -9,7 +9,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   const navigation = [
     { name: 'Accueil', path: '/' },
     { name: 'Videbarras team', path: '/about' },
-    { name: 'Service', path: '/services' },
+    { name: 'Services', path: '/services' },
     { name: 'Contact', path: '/contact' },
     { name: 'FAQ', path: '/faq' },
   ];
@@ -46,9 +46,9 @@ export default function Layout({ children }: { children: React.ReactNode }) {
             </nav>
 
             <div className="hidden md:flex items-center space-x-6">
-              <a href="tel:+33769181264" className="flex items-center space-x-2 text-gray-700 hover:text-primary transition-colors">
+              <a href="tel:+33695257352" className="flex items-center space-x-2 text-gray-700 hover:text-primary transition-colors">
                 <Phone className="h-4 w-4" />
-                <span className="text-sm font-medium">07 69 18 12 64</span>
+                <span className="text-sm font-medium">06 95 25 73 52</span>
               </a>
             </div>
 
@@ -76,9 +76,9 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                   {item.name}
                 </Link>
               ))}
-              <a href="tel:+33769181264" className="flex items-center space-x-2 text-gray-700 pt-4 border-t border-gray-100">
+              <a href="tel:+33695257352" className="flex items-center space-x-2 text-gray-700 pt-4 border-t border-gray-100">
                 <Phone className="h-4 w-4" />
-                <span className="text-sm font-medium">07 69 18 12 64</span>
+                <span className="text-sm font-medium">06 95 25 73 52</span>
               </a>
             </div>
           </div>
@@ -94,9 +94,9 @@ export default function Layout({ children }: { children: React.ReactNode }) {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
             <div>
               <img
-                src="/6b7446e4-b35e-4e7e-b4db-01e0f19a1e26.png"
+                src="/debara.png"
                 alt="Vidébarras"
-                className="h-10 w-auto mb-6"
+                className="h-16 w-auto mb-6"
               />
               <p className="text-gray-300 leading-relaxed">
                 Votre expert en débarras en Île-de-France. Service professionnel, rapide et respectueux de l'environnement.
@@ -121,11 +121,11 @@ export default function Layout({ children }: { children: React.ReactNode }) {
               <ul className="space-y-4">
                 <li className="flex items-center space-x-3 text-gray-300">
                   <Phone className="h-5 w-5" />
-                  <span>07 69 18 12 64</span>
+                  <span>+33695257352</span>
                 </li>
                 <li className="flex items-center space-x-3 text-gray-300">
                   <Mail className="h-5 w-5" />
-                  <span>contact@videbarras.fr</span>
+                  <span>Contact@vidédarras.fr</span>
                 </li>
               </ul>
             </div>

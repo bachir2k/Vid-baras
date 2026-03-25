@@ -150,6 +150,21 @@ export default function EstimationWizard() {
 
       if (error) throw error;
 
+      // Envoi de l'e-mail de récapitulatif via une Edge Function Supabase
+      const { error: functionError } = await supabase.functions.invoke('send-estimation-email', {
+        body: {
+          email: data.email,
+          name: data.name,
+          service_type: data.serviceType,
+          estimated_price: estimatedPrice
+        }
+      });
+
+      if (functionError) {
+        console.error('Erreur lors de l\'envoi de l\'email:', functionError);
+        // On log l'erreur mais on ne bloque pas l'utilisateur car sa demande est déjà en base
+      }
+
       setIsSubmitted(true);
     } catch (error) {
       console.error('Error submitting estimation:', error);

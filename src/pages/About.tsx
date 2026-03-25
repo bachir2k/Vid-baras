@@ -277,7 +277,7 @@ export default function About() {
             <div className="flex flex-col sm:flex-row gap-4">
               <button className="bg-white text-primary hover:bg-slate-100 font-bold h-12 px-8 rounded-lg shadow-lg transition-colors flex items-center justify-center gap-2 min-w-[200px]">
                 <span className="material-symbols-outlined">call</span>
-                01 23 45 67 89
+                06 95 25 73 52
               </button>
               <button className="bg-blue-800/40 hover:bg-blue-800/60 text-white font-bold h-12 px-8 rounded-lg border border-white/20 backdrop-blur-sm transition-colors flex items-center justify-center gap-2 min-w-[200px]">
                 Demander un devis
@@ -320,10 +320,10 @@ export default function About() {
                 <h4 className="font-bold text-[#0d141b] dark:text-white mb-4">Contact</h4>
                 <ul className="flex flex-col gap-3 text-sm text-slate-500 dark:text-slate-400">
                   <li className="flex items-center gap-2">
-                    <span className="material-symbols-outlined !text-[18px]">mail</span> contact@roidudebarras.fr
+                    <span className="material-symbols-outlined !text-[18px]">mail</span> contact@vidébarras.fr
                   </li>
                   <li className="flex items-center gap-2">
-                    <span className="material-symbols-outlined !text-[18px]">phone</span> 01 23 45 67 89
+                    <span className="material-symbols-outlined !text-[18px]">phone</span> 06 95 25 73 52
                   </li>
                   <li className="flex items-center gap-2">
                     <span className="material-symbols-outlined !text-[18px]">schedule</span> Lun - Sam: 8h - 20h

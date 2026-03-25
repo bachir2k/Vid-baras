@@ -101,7 +101,7 @@ export default function Services() {
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
               <a
-                href="https://wa.me/+33123456789?text=Bonjour%2C%20je%20souhaite%20un%20renseignement%20pour%20un%20d%C3%A9barras."
+                href="https://wa.me/+33695257352?text=Bonjour%2C%20je%20souhaite%20un%20renseignement%20pour%20un%20d%C3%A9barras."
                 target="_blank"
                 rel="noopener noreferrer"
                 className="group bg-white dark:bg-slate-800 rounded-2xl p-6 shadow-md hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 border-2 border-transparent hover:border-green-500"
@@ -120,7 +120,7 @@ export default function Services() {
               </a>
 
               <a
-                href="tel:+33123456789"
+                href="tel:+33695257352"
                 className="group bg-white dark:bg-slate-800 rounded-2xl p-6 shadow-md hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 border-2 border-transparent hover:border-blue-500"
               >
                 <div className="flex flex-col items-center text-center gap-4">
@@ -137,7 +137,7 @@ export default function Services() {
               </a>
 
               <a
-                href="mailto:contact@roiddebarras.fr"
+                href="mailto:Contact@vidédarras.fr"
                 className="group bg-white dark:bg-slate-800 rounded-2xl p-6 shadow-md hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 border-2 border-transparent hover:border-red-500"
               >
                 <div className="flex flex-col items-center text-center gap-4">
@@ -154,7 +154,7 @@ export default function Services() {
               </a>
 
               <a
-                href="https://www.tiktok.com/@roiddebarras"
+                href="https://www.tiktok.com/@videbarras"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="group bg-white dark:bg-slate-800 rounded-2xl p-6 shadow-md hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 border-2 border-transparent hover:border-gray-900 dark:hover:border-gray-700"
@@ -304,7 +304,7 @@ export default function Services() {
         <section className="relative py-16 px-4 sm:px-10 overflow-hidden">
           <div className="absolute inset-0 z-0">
             <div
-              className="w-full h-full bg-cover bg-center"
+              className="w-full h-full bg-cover  bg-center"
               role="img"
               aria-label="Texture nature verte abstraite"
               style={{
@@ -342,7 +342,7 @@ export default function Services() {
             </div>
             <div className="flex-1 h-64 md:h-80 w-full relative rounded-xl overflow-hidden shadow-xl">
               <div
-                className="w-full h-full bg-cover bg-center"
+                className="w-full h-full bg-cover  bg-center"
                 role="img"
                 aria-label="Centre de tri et recyclage moderne"
                 style={{
@@ -364,7 +364,7 @@ export default function Services() {
               <div className="flex flex-col items-center gap-4">
                 <div className="size-32 rounded-full overflow-hidden border-4 border-slate-100 dark:border-slate-800 shadow-lg">
                   <div
-                    className="w-full h-full bg-cover bg-center"
+                    className="w-full h-full bg-cover  bg-center"
                     role="img"
                     aria-label="Portrait de Thomas fondateur"
                     style={{
@@ -383,7 +383,7 @@ export default function Services() {
               <div className="flex flex-col items-center gap-4">
                 <div className="size-32 rounded-full overflow-hidden border-4 border-slate-100 dark:border-slate-800 shadow-lg">
                   <div
-                    className="w-full h-full bg-cover bg-center"
+                    className="w-full h-full bg-cover  bg-center"
                     role="img"
                     aria-label="Portrait de Sarah logistique"
                     style={{
@@ -402,7 +402,7 @@ export default function Services() {
               <div className="flex flex-col items-center gap-4">
                 <div className="size-32 rounded-full overflow-hidden border-4 border-slate-100 dark:border-slate-800 shadow-lg">
                   <div
-                    className="w-full h-full bg-cover bg-center"
+                    className="w-full h-full bg-cover  bg-center"
                     role="img"
                     aria-label="Portrait de Karim chef d'équipe"
                     style={{
@@ -421,7 +421,7 @@ export default function Services() {
               <div className="flex flex-col items-center gap-4">
                 <div className="size-32 rounded-full overflow-hidden border-4 border-slate-100 dark:border-slate-800 shadow-lg">
                   <div
-                    className="w-full h-full bg-cover bg-center"
+                    className="w-full h-full bg-cover  bg-center"
                     role="img"
                     aria-label="Portrait de Julie service client"
                     style={{

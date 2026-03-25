@@ -51,7 +51,7 @@ export default function Contact() {
               <button className="flex cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-6 bg-primary hover:bg-blue-600 text-white text-sm font-bold leading-normal tracking-[0.015em] transition-colors shadow-sm">
                 <span className="flex items-center gap-2">
                   <span className="material-symbols-outlined text-[20px]">call</span>
-                  07 69 18 12 64
+                  06 95 25 73 52
                 </span>
               </button>
             </div>
@@ -139,7 +139,7 @@ export default function Contact() {
                         </div>
                         <div>
                           <p className="text-sm text-[#4c739a] dark:text-gray-400 font-medium mb-1">Téléphone</p>
-                          <a className="text-lg font-bold text-[#0d141b] dark:text-white hover:text-primary transition-colors" href="tel:+33769181264">07 69 18 12 64</a>
+                          <a className="text-lg font-bold text-[#0d141b] dark:text-white hover:text-primary transition-colors" href="tel:+33695257352">06 95 25 73 52</a>
                           <p className="text-xs text-green-600 mt-1 flex items-center gap-1 font-medium">
                             <span className="material-symbols-outlined text-[16px]">check_circle</span>
                             Disponible 7j/7
@@ -152,7 +152,7 @@ export default function Contact() {
                         </div>
                         <div>
                           <p className="text-sm text-[#4c739a] dark:text-gray-400 font-medium mb-1">Email</p>
-                          <a className="text-lg font-bold text-[#0d141b] dark:text-white hover:text-primary transition-colors break-all" href="mailto:contact@videbarras.fr">contact@videbarras.fr</a>
+                          <a className="text-lg font-bold text-[#0d141b] dark:text-white hover:text-primary transition-colors break-all" href="mailto:contact@vidébarras.fr">contact@vidébarras.fr</a>
                         </div>
                       </div>
                       <div className="flex items-start gap-4">
