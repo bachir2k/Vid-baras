@@ -43,80 +43,84 @@ export default function EstimationWizard() {
     }
   };
 
-  const calculateEstimate = (): string => {
-    const { serviceType, serviceDetails } = data;
+  const calculateCavePrice = (details: Record<string, string>) => {
+    let price = 400;
+    if (details.size === 'Petite (<5 m²)') price = 150;
+    else if (details.size === 'Moyenne (5-10 m²)') price = 250;
 
-    let basePrice = 0;
-    let label = '';
+    if (details.access === 'Accès difficile') price += 100;
+    if (details.heavyItems === 'Oui') price += 150;
+    return { basePrice: price, label: `${price}€ - ${price + 150}€` };
+  };
+
+  const calculateAppartementPrice = (details: Record<string, string>) => {
+    let price = 800;
+    if (details.size === 'Studio / T1') price = 300;
+    else if (details.size === 'T2 / T3') price = 500;
+
+    const floor = parseInt(details.floor || '0');
+    if (floor > 3 && details.elevator === 'Non') price += 200;
+
+    if (details.clutter === 'Entièrement meublé') price += 300;
+    else if (details.clutter === 'Partiellement meublé') price += 150;
+
+    return { basePrice: price, label: `${price}€ - ${price + 300}€` };
+  };
+
+  const calculateMaisonPrice = (details: Record<string, string>) => {
+    const floors = parseInt(details.floors || '1');
+    let price = 600 + (floors - 1) * 300;
+
+    const surface = parseInt(details.surface || '0');
+    if (surface > 150) price += 400;
+    else if (surface > 100) price += 200;
+
+    if (details.outbuildings === 'Oui') price += 300;
+
+    return { basePrice: price, label: `${price}€ - ${price + 500}€` };
+  };
+
+  const calculateGrenierPrice = (details: Record<string, string>) => {
+    let price = details.access === 'Trappe' ? 200 : 150;
+
+    if (details.volume === 'Important (>10 m³)') price += 250;
+    else if (details.volume === 'Moyen (5-10 m³)') price += 150;
+    else price += 80;
+
+    return { basePrice: price, label: `${price}€ - ${price + 150}€` };
+  };
+
+  const calculateLocalCommercialPrice = (details: Record<string, string>) => {
+    const commercialSurface = parseInt(details.surface || '0');
+    let price = 600;
+    if (commercialSurface > 200) price = 1500;
+    else if (commercialSurface > 100) price = 1000;
+
+    if (details.wasteVolume === 'Important') price += 500;
+    else if (details.wasteVolume === 'Moyen') price += 250;
+
+    return { basePrice: price, label: `${price}€ - ${price + 700}€` };
+  };
+
+  const calculateEstimate = (): string => {
+    const { serviceType, serviceDetails, timeline } = data;
+    let result: { basePrice: number, label: string } | null = null;
 
     switch (serviceType) {
-      case 'Cave':
-        if (serviceDetails.size === 'Petite (<5 m²)') basePrice = 150;
-        else if (serviceDetails.size === 'Moyenne (5-10 m²)') basePrice = 250;
-        else basePrice = 400;
-
-        if (serviceDetails.access === 'Accès difficile') basePrice += 100;
-        if (serviceDetails.heavyItems === 'Oui') basePrice += 150;
-        label = `${basePrice}€ - ${basePrice + 150}€`;
-        break;
-
-      case 'Appartement':
-        if (serviceDetails.size === 'Studio / T1') basePrice = 300;
-        else if (serviceDetails.size === 'T2 / T3') basePrice = 500;
-        else basePrice = 800;
-
-        const floor = parseInt(serviceDetails.floor || '0');
-        if (floor > 3 && serviceDetails.elevator === 'Non') basePrice += 200;
-
-        if (serviceDetails.clutter === 'Entièrement meublé') basePrice += 300;
-        else if (serviceDetails.clutter === 'Partiellement meublé') basePrice += 150;
-
-        label = `${basePrice}€ - ${basePrice + 300}€`;
-        break;
-
-      case 'Maison':
-        const floors = parseInt(serviceDetails.floors || '1');
-        basePrice = 600 + (floors - 1) * 300;
-
-        const surface = parseInt(serviceDetails.surface || '0');
-        if (surface > 150) basePrice += 400;
-        else if (surface > 100) basePrice += 200;
-
-        if (serviceDetails.outbuildings === 'Oui') basePrice += 300;
-
-        label = `${basePrice}€ - ${basePrice + 500}€`;
-        break;
-
-      case 'Grenier':
-        if (serviceDetails.access === 'Trappe') basePrice = 200;
-        else basePrice = 150;
-
-        if (serviceDetails.volume === 'Important (>10 m³)') basePrice += 250;
-        else if (serviceDetails.volume === 'Moyen (5-10 m³)') basePrice += 150;
-        else basePrice += 80;
-
-        label = `${basePrice}€ - ${basePrice + 150}€`;
-        break;
-
-      case 'Local commercial':
-        const commercialSurface = parseInt(serviceDetails.surface || '0');
-        if (commercialSurface > 200) basePrice = 1500;
-        else if (commercialSurface > 100) basePrice = 1000;
-        else basePrice = 600;
-
-        if (serviceDetails.wasteVolume === 'Important') basePrice += 500;
-        else if (serviceDetails.wasteVolume === 'Moyen') basePrice += 250;
-
-        label = `${basePrice}€ - ${basePrice + 700}€`;
-        break;
+      case 'Cave': result = calculateCavePrice(serviceDetails); break;
+      case 'Appartement': result = calculateAppartementPrice(serviceDetails); break;
+      case 'Maison': result = calculateMaisonPrice(serviceDetails); break;
+      case 'Grenier': result = calculateGrenierPrice(serviceDetails); break;
+      case 'Local commercial': result = calculateLocalCommercialPrice(serviceDetails); break;
+      default: return '';
     }
 
-    if (data.timeline === 'Urgent (24-48h)') {
-      basePrice = Math.round(basePrice * 1.3);
-      label = `${basePrice}€ - ${basePrice + 300}€`;
+    if (timeline === 'Urgent (24-48h)') {
+      const urgentPrice = Math.round(result.basePrice * 1.3);
+      return `${urgentPrice}€ - ${urgentPrice + 300}€`;
     }
 
-    return label;
+    return result.label;
   };
 
   const handleNext = () => {
@@ -486,27 +490,30 @@ export default function EstimationWizard() {
     }
   };
 
+  const isServiceDetailsValid = () => {
+    const { serviceType, serviceDetails: details } = data;
+    switch (serviceType) {
+      case 'Cave':
+        return details.size && details.access && details.heavyItems;
+      case 'Appartement':
+        return details.size && details.floor && details.elevator && details.clutter;
+      case 'Maison':
+        return details.floors && details.surface && details.outbuildings;
+      case 'Grenier':
+        return details.access && details.volume;
+      case 'Local commercial':
+        return details.surface && details.activityType && details.wasteVolume;
+      default:
+        return false;
+    }
+  };
+
   const isStepValid = () => {
     switch (currentStep) {
       case 1:
         return data.serviceType !== '';
       case 2:
-        if (data.serviceType === 'Cave') {
-          return data.serviceDetails.size && data.serviceDetails.access && data.serviceDetails.heavyItems;
-        }
-        if (data.serviceType === 'Appartement') {
-          return data.serviceDetails.size && data.serviceDetails.floor && data.serviceDetails.elevator && data.serviceDetails.clutter;
-        }
-        if (data.serviceType === 'Maison') {
-          return data.serviceDetails.floors && data.serviceDetails.surface && data.serviceDetails.outbuildings;
-        }
-        if (data.serviceType === 'Grenier') {
-          return data.serviceDetails.access && data.serviceDetails.volume;
-        }
-        if (data.serviceType === 'Local commercial') {
-          return data.serviceDetails.surface && data.serviceDetails.activityType && data.serviceDetails.wasteVolume;
-        }
-        return false;
+        return isServiceDetailsValid();
       case 3:
         return data.timeline !== '';
       case 4:

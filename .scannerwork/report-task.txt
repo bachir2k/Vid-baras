@@ -1,0 +1,6 @@
+projectKey=videbarras-nov
+serverUrl=http://localhost:9000
+serverVersion=26.3.0.120487
+dashboardUrl=http://localhost:9000/dashboard?id=videbarras-nov
+ceTaskId=3b0c1052-5857-4e85-a005-b61a09d5871b
+ceTaskUrl=http://localhost:9000/api/ce/task?id=3b0c1052-5857-4e85-a005-b61a09d5871b
