@@ -286,60 +286,7 @@ export default function About() {
           </div>
         </div>
 
-        <footer className="bg-white dark:bg-[#1a2632] border-t border-[#e7edf3] dark:border-gray-700 pt-16 pb-8">
-          <div className="max-w-[1280px] mx-auto px-4 sm:px-10">
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-10 mb-12">
-              <div className="flex flex-col gap-4">
-                <div className="flex items-center gap-2 text-[#0d141b] dark:text-white mb-2">
-                  <span className="material-symbols-outlined text-primary !text-[28px]">recycling</span>
-                  <h3 className="text-lg font-bold">Roi du Débarras</h3>
-                </div>
-                <p className="text-sm text-slate-500 dark:text-slate-400 leading-relaxed">
-                  Expert du débarras en Île-de-France. Nous valorisons vos biens et recyclons de manière responsable.
-                </p>
-              </div>
-              <div>
-                <h4 className="font-bold text-[#0d141b] dark:text-white mb-4">Services</h4>
-                <ul className="flex flex-col gap-2 text-sm text-slate-500 dark:text-slate-400">
-                  <li><a className="hover:text-primary transition-colors" href="#">Maisons &amp; Appartements</a></li>
-                  <li><a className="hover:text-primary transition-colors" href="#">Bureaux &amp; Locaux</a></li>
-                  <li><a className="hover:text-primary transition-colors" href="#">Caves &amp; Greniers</a></li>
-                  <li><a className="hover:text-primary transition-colors" href="#">Syndrome de Diogène</a></li>
-                </ul>
-              </div>
-              <div>
-                <h4 className="font-bold text-[#0d141b] dark:text-white mb-4">Zone d'intervention</h4>
-                <ul className="flex flex-col gap-2 text-sm text-slate-500 dark:text-slate-400">
-                  <li>Paris (75)</li>
-                  <li>Hauts-de-Seine (92)</li>
-                  <li>Seine-Saint-Denis (93)</li>
-                  <li>Val-de-Marne (94)</li>
-                </ul>
-              </div>
-              <div>
-                <h4 className="font-bold text-[#0d141b] dark:text-white mb-4">Contact</h4>
-                <ul className="flex flex-col gap-3 text-sm text-slate-500 dark:text-slate-400">
-                  <li className="flex items-center gap-2">
-                    <span className="material-symbols-outlined !text-[18px]">mail</span> contact@vidébarras.fr
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <span className="material-symbols-outlined !text-[18px]">phone</span> 06 95 25 73 52
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <span className="material-symbols-outlined !text-[18px]">schedule</span> Lun - Sam: 8h - 20h
-                  </li>
-                </ul>
-              </div>
-            </div>
-            <div className="border-t border-slate-100 dark:border-slate-700 pt-8 flex flex-col sm:flex-row justify-between items-center gap-4">
-              <p className="text-xs text-slate-400">© 2023 Roi du Débarras. Tous droits réservés.</p>
-              <div className="flex gap-4 text-xs text-slate-400">
-                <a className="hover:text-slate-600 dark:hover:text-slate-300" href="#">Mentions Légales</a>
-                <a className="hover:text-slate-600 dark:hover:text-slate-300" href="#">Politique de Confidentialité</a>
-              </div>
-            </div>
-          </div>
-        </footer>
+        
       </div>
     </>
   );

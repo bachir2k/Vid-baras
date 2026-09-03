@@ -1,7 +1,44 @@
+import { useState } from 'react';
 import SEO from '../components/SEO';
 import { breadcrumbList } from '../lib/structuredData';
+import { supabase } from '../lib/supabase';
 
 export default function Contact() {
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitStatus, setSubmitStatus] = useState<'success' | 'error' | null>(null);
+
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    setIsSubmitting(true);
+    setSubmitStatus(null);
+
+    const form = event.currentTarget;
+    const formData = new FormData(form);
+
+    try {
+      const { error } = await supabase.functions.invoke('devis-mail', {
+        body: {
+          name: formData.get('name'),
+          phone: formData.get('phone'),
+          email: formData.get('email'),
+          property_type: formData.get('property_type'),
+          surface: formData.get('surface') || null,
+          message: formData.get('message') || null,
+        },
+      });
+
+      if (error) throw error;
+
+      form.reset();
+      setSubmitStatus('success');
+    } catch (error) {
+      console.error('Erreur lors de l’envoi de la demande de devis:', error);
+      setSubmitStatus('error');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   return (
     <>
       <SEO
@@ -80,26 +117,26 @@ export default function Contact() {
                       <h2 className="text-[#0d141b] dark:text-white text-2xl font-bold leading-tight mb-2">Demande de devis gratuit</h2>
                       <p className="text-[#4c739a] dark:text-gray-400">Remplissez le formulaire ci-dessous pour recevoir une estimation précise.</p>
                     </div>
-                    <form className="flex flex-col gap-6">
+                    <form className="flex flex-col gap-6" onSubmit={handleSubmit}>
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                         <label className="flex flex-col gap-2">
                           <span className="text-[#0d141b] dark:text-gray-200 text-sm font-medium">Nom complet <span className="text-red-500">*</span></span>
-                          <input className="form-input w-full rounded-lg border border-[#cfdbe7] dark:border-gray-600 bg-slate-50 dark:bg-gray-800 dark:text-white px-4 py-3 text-base focus:border-primary focus:ring-1 focus:ring-primary transition-colors outline-none placeholder:text-gray-400" placeholder="Jean Dupont" required type="text"/>
+                          <input name="name" className="form-input w-full rounded-lg border border-[#cfdbe7] dark:border-gray-600 bg-slate-50 dark:bg-gray-800 dark:text-white px-4 py-3 text-base focus:border-primary focus:ring-1 focus:ring-primary transition-colors outline-none placeholder:text-gray-400" placeholder="Jean Dupont" required type="text"/>
                         </label>
                         <label className="flex flex-col gap-2">
                           <span className="text-[#0d141b] dark:text-gray-200 text-sm font-medium">Numéro de téléphone <span className="text-red-500">*</span></span>
-                          <input className="form-input w-full rounded-lg border border-[#cfdbe7] dark:border-gray-600 bg-slate-50 dark:bg-gray-800 dark:text-white px-4 py-3 text-base focus:border-primary focus:ring-1 focus:ring-primary transition-colors outline-none placeholder:text-gray-400" placeholder="06 12 34 56 78" required type="tel"/>
+                          <input name="phone" className="form-input w-full rounded-lg border border-[#cfdbe7] dark:border-gray-600 bg-slate-50 dark:bg-gray-800 dark:text-white px-4 py-3 text-base focus:border-primary focus:ring-1 focus:ring-primary transition-colors outline-none placeholder:text-gray-400" placeholder="06 12 34 56 78" required type="tel"/>
                         </label>
                       </div>
                       <label className="flex flex-col gap-2">
                         <span className="text-[#0d141b] dark:text-gray-200 text-sm font-medium">Email <span className="text-red-500">*</span></span>
-                        <input className="form-input w-full rounded-lg border border-[#cfdbe7] dark:border-gray-600 bg-slate-50 dark:bg-gray-800 dark:text-white px-4 py-3 text-base focus:border-primary focus:ring-1 focus:ring-primary transition-colors outline-none placeholder:text-gray-400" placeholder="jean.dupont@email.com" required type="email"/>
+                        <input name="email" className="form-input w-full rounded-lg border border-[#cfdbe7] dark:border-gray-600 bg-slate-50 dark:bg-gray-800 dark:text-white px-4 py-3 text-base focus:border-primary focus:ring-1 focus:ring-primary transition-colors outline-none placeholder:text-gray-400" placeholder="jean.dupont@email.com" required type="email"/>
                       </label>
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                         <label className="flex flex-col gap-2">
                           <span className="text-[#0d141b] dark:text-gray-200 text-sm font-medium">Type de local</span>
                           <div className="relative">
-                            <select className="form-select w-full rounded-lg border border-[#cfdbe7] dark:border-gray-600 bg-slate-50 dark:bg-gray-800 dark:text-white px-4 py-3 text-base focus:border-primary focus:ring-1 focus:ring-primary transition-colors outline-none appearance-none cursor-pointer">
+                            <select name="property_type" className="form-select w-full rounded-lg border border-[#cfdbe7] dark:border-gray-600 bg-slate-50 dark:bg-gray-800 dark:text-white px-4 py-3 text-base focus:border-primary focus:ring-1 focus:ring-primary transition-colors outline-none appearance-none cursor-pointer">
                               <option>Appartement</option>
                               <option>Maison</option>
                               <option>Cave / Grenier</option>
@@ -111,19 +148,21 @@ export default function Contact() {
                         </label>
                         <label className="flex flex-col gap-2">
                           <span className="text-[#0d141b] dark:text-gray-200 text-sm font-medium">Surface approximative (m²)</span>
-                          <input className="form-input w-full rounded-lg border border-[#cfdbe7] dark:border-gray-600 bg-slate-50 dark:bg-gray-800 dark:text-white px-4 py-3 text-base focus:border-primary focus:ring-1 focus:ring-primary transition-colors outline-none placeholder:text-gray-400" placeholder="Ex: 50" type="number"/>
+                          <input name="surface" className="form-input w-full rounded-lg border border-[#cfdbe7] dark:border-gray-600 bg-slate-50 dark:bg-gray-800 dark:text-white px-4 py-3 text-base focus:border-primary focus:ring-1 focus:ring-primary transition-colors outline-none placeholder:text-gray-400" placeholder="Ex: 50" type="number"/>
                         </label>
                       </div>
                       <label className="flex flex-col gap-2">
                         <span className="text-[#0d141b] dark:text-gray-200 text-sm font-medium">Message ou détails supplémentaires</span>
-                        <textarea className="form-textarea w-full rounded-lg border border-[#cfdbe7] dark:border-gray-600 bg-slate-50 dark:bg-gray-800 dark:text-white px-4 py-3 text-base focus:border-primary focus:ring-1 focus:ring-primary transition-colors outline-none placeholder:text-gray-400 min-h-[120px] resize-y" placeholder="Décrivez votre besoin (accès difficile, objets lourds, ascenseur, etc.)..."></textarea>
+                        <textarea name="message" className="form-textarea w-full rounded-lg border border-[#cfdbe7] dark:border-gray-600 bg-slate-50 dark:bg-gray-800 dark:text-white px-4 py-3 text-base focus:border-primary focus:ring-1 focus:ring-primary transition-colors outline-none placeholder:text-gray-400 min-h-[120px] resize-y" placeholder="Décrivez votre besoin (accès difficile, objets lourds, ascenseur, etc.)..."></textarea>
                       </label>
                       <div className="pt-4">
-                        <button className="w-full md:w-auto min-w-[200px] flex items-center justify-center gap-2 bg-primary hover:bg-blue-600 text-white font-bold py-4 px-8 rounded-lg transition-all shadow-md hover:shadow-lg active:scale-[0.98]" type="button">
+                        <button className="w-full md:w-auto min-w-[200px] flex items-center justify-center gap-2 bg-primary hover:bg-blue-600 text-white font-bold py-4 px-8 rounded-lg transition-all shadow-md hover:shadow-lg active:scale-[0.98] disabled:opacity-60 disabled:cursor-not-allowed" disabled={isSubmitting} type="submit">
                           <span className="material-symbols-outlined">send</span>
-                          Envoyer ma demande
+                          {isSubmitting ? 'Envoi en cours...' : 'Envoyer ma demande'}
                         </button>
                         <p className="text-xs text-gray-400 mt-3 text-center md:text-left">* Vos données personnelles sont confidentielles et ne seront jamais partagées.</p>
+                        {submitStatus === 'success' && <p className="text-sm text-green-600 mt-2">Votre demande a bien été envoyée. Nous vous recontacterons sous 24h.</p>}
+                        {submitStatus === 'error' && <p className="text-sm text-red-600 mt-2">L’envoi a échoué. Vérifiez vos informations et réessayez.</p>}
                       </div>
                     </form>
                   </div>
