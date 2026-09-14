@@ -1,6 +1,13 @@
 import { useState } from 'react';
 import { ChevronRight, ChevronLeft, Check } from 'lucide-react';
 import { supabase } from '../lib/supabase';
+import {
+  locationSchema,
+  contactInfoSchema,
+  getFieldErrors,
+  formatFrenchPhoneAsYouType,
+  sanitizePostalCodeInput,
+} from '../lib/validation';
 
 interface EstimationData {
   serviceType: string;
@@ -18,6 +25,7 @@ export default function EstimationWizard() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [estimatedPrice, setEstimatedPrice] = useState('');
+  const [errors, setErrors] = useState<Record<string, string>>({});
 
   const [data, setData] = useState<EstimationData>({
     serviceType: '',
@@ -40,7 +48,40 @@ export default function EstimationWizard() {
       }));
     } else {
       setData(prev => ({ ...prev, [field]: value }));
+      if (errors[field]) {
+        setErrors(prev => {
+          const next = { ...prev };
+          delete next[field];
+          return next;
+        });
+      }
     }
+  };
+
+  const validateLocation = () => {
+    const fieldErrors = getFieldErrors(locationSchema, { postalCode: data.postalCode, city: data.city });
+    setErrors(prev => ({ ...prev, ...fieldErrors }));
+    return Object.keys(fieldErrors).length === 0;
+  };
+
+  const validateContactInfo = () => {
+    const fieldErrors = getFieldErrors(contactInfoSchema, { name: data.name, phone: data.phone, email: data.email });
+    setErrors(prev => ({ ...prev, ...fieldErrors }));
+    return Object.keys(fieldErrors).length === 0;
+  };
+
+  const handleBlur = (field: 'postalCode' | 'city' | 'name' | 'phone' | 'email') => {
+    const schema = field === 'postalCode' || field === 'city' ? locationSchema.shape[field] : contactInfoSchema.shape[field];
+    const result = schema.safeParse(data[field]);
+    setErrors(prev => {
+      const next = { ...prev };
+      if (result.success) {
+        delete next[field];
+      } else {
+        next[field] = result.error.issues[0]?.message ?? 'Valeur invalide';
+      }
+      return next;
+    });
   };
 
   const calculateCavePrice = (details: Record<string, string>) => {
@@ -124,6 +165,9 @@ export default function EstimationWizard() {
   };
 
   const handleNext = () => {
+    if (currentStep === 4 && !validateLocation()) return;
+    if (currentStep === 5 && !validateContactInfo()) return;
+
     if (currentStep === totalSteps - 1) {
       const estimate = calculateEstimate();
       setEstimatedPrice(estimate);
@@ -136,6 +180,8 @@ export default function EstimationWizard() {
   };
 
   const handleSubmit = async () => {
+    if (!validateLocation() || !validateContactInfo()) return;
+
     setIsSubmitting(true);
 
     try {
@@ -639,11 +685,16 @@ export default function EstimationWizard() {
                 </label>
                 <input
                   type="text"
+                  inputMode="numeric"
                   value={data.postalCode}
-                  onChange={(e) => updateData('postalCode', e.target.value)}
-                  className="w-full p-4 rounded-xl border-2 border-gray-200 focus:border-blue-600 focus:outline-none"
+                  onChange={(e) => updateData('postalCode', sanitizePostalCodeInput(e.target.value))}
+                  onBlur={() => handleBlur('postalCode')}
+                  className={`w-full p-4 rounded-xl border-2 focus:outline-none ${
+                    errors.postalCode ? 'border-red-400 focus:border-red-500' : 'border-gray-200 focus:border-blue-600'
+                  }`}
                   placeholder="Ex: 75001"
                 />
+                {errors.postalCode && <p className="text-red-600 text-sm mt-2">{errors.postalCode}</p>}
               </div>
               <div>
                 <label className="block text-sm font-semibold text-gray-900 mb-2">
@@ -653,9 +704,13 @@ export default function EstimationWizard() {
                   type="text"
                   value={data.city}
                   onChange={(e) => updateData('city', e.target.value)}
-                  className="w-full p-4 rounded-xl border-2 border-gray-200 focus:border-blue-600 focus:outline-none"
+                  onBlur={() => handleBlur('city')}
+                  className={`w-full p-4 rounded-xl border-2 focus:outline-none ${
+                    errors.city ? 'border-red-400 focus:border-red-500' : 'border-gray-200 focus:border-blue-600'
+                  }`}
                   placeholder="Ex: Paris"
                 />
+                {errors.city && <p className="text-red-600 text-sm mt-2">{errors.city}</p>}
               </div>
             </div>
           </div>
@@ -675,9 +730,13 @@ export default function EstimationWizard() {
                   type="text"
                   value={data.name}
                   onChange={(e) => updateData('name', e.target.value)}
-                  className="w-full p-4 rounded-xl border-2 border-gray-200 focus:border-blue-600 focus:outline-none"
+                  onBlur={() => handleBlur('name')}
+                  className={`w-full p-4 rounded-xl border-2 focus:outline-none ${
+                    errors.name ? 'border-red-400 focus:border-red-500' : 'border-gray-200 focus:border-blue-600'
+                  }`}
                   placeholder="Jean Dupont"
                 />
+                {errors.name && <p className="text-red-600 text-sm mt-2">{errors.name}</p>}
               </div>
               <div>
                 <label className="block text-sm font-semibold text-gray-900 mb-2">
@@ -686,10 +745,14 @@ export default function EstimationWizard() {
                 <input
                   type="tel"
                   value={data.phone}
-                  onChange={(e) => updateData('phone', e.target.value)}
-                  className="w-full p-4 rounded-xl border-2 border-gray-200 focus:border-blue-600 focus:outline-none"
+                  onChange={(e) => updateData('phone', formatFrenchPhoneAsYouType(e.target.value))}
+                  onBlur={() => handleBlur('phone')}
+                  className={`w-full p-4 rounded-xl border-2 focus:outline-none ${
+                    errors.phone ? 'border-red-400 focus:border-red-500' : 'border-gray-200 focus:border-blue-600'
+                  }`}
                   placeholder="06 12 34 56 78"
                 />
+                {errors.phone && <p className="text-red-600 text-sm mt-2">{errors.phone}</p>}
               </div>
               <div>
                 <label className="block text-sm font-semibold text-gray-900 mb-2">
@@ -699,9 +762,13 @@ export default function EstimationWizard() {
                   type="email"
                   value={data.email}
                   onChange={(e) => updateData('email', e.target.value)}
-                  className="w-full p-4 rounded-xl border-2 border-gray-200 focus:border-blue-600 focus:outline-none"
+                  onBlur={() => handleBlur('email')}
+                  className={`w-full p-4 rounded-xl border-2 focus:outline-none ${
+                    errors.email ? 'border-red-400 focus:border-red-500' : 'border-gray-200 focus:border-blue-600'
+                  }`}
                   placeholder="jean.dupont@email.com"
                 />
+                {errors.email && <p className="text-red-600 text-sm mt-2">{errors.email}</p>}
               </div>
             </div>
           </div>

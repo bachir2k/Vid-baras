@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react';
 import { supabase } from '../lib/supabase';
 import { Play } from 'lucide-react';
 import SEO from '../components/SEO';
+import ScrollDownIndicator from '../components/ScrollDownIndicator';
+import { usePageReveal } from '../hooks/usePageReveal';
 
 interface Realization {
   id: string;
@@ -53,27 +55,50 @@ export default function Realizations() {
   }
 
   return (
-    <div className="relative flex h-auto min-h-screen w-full flex-col overflow-x-hidden">
+    <RealizationsPage realizations={realizations} getMediaType={getMediaType} selectedMedia={selectedMedia} setSelectedMedia={setSelectedMedia} />
+  );
+}
+
+function RealizationsPage({
+  realizations,
+  getMediaType,
+  selectedMedia,
+  setSelectedMedia,
+}: {
+  realizations: Realization[];
+  getMediaType: (url: string) => 'photo' | 'video';
+  selectedMedia: { url: string; type: string } | null;
+  setSelectedMedia: (media: { url: string; type: string } | null) => void;
+}) {
+  const revealRoot = usePageReveal([
+    { selector: '.js-reveal-hero', mode: 'load', translateY: 20, staggerMs: 100 },
+    { selector: '.js-reveal-gallery-card', container: '.js-gallery-section', staggerMs: 70 },
+  ]);
+
+  return (
+    <div ref={revealRoot} className="relative flex h-auto min-h-screen w-full flex-col overflow-x-hidden">
       <SEO
         title="Nos Réalisations - Vidébarras Île-de-France"
         description="Explorez nos projets de débarras de maisons, appartements, caves et locaux professionnels en images et vidéos. Résultat garanti avant/après."
       />
-      <main className="flex flex-col grow pt-24">
-        <div className="relative overflow-hidden bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-white py-20">
+      <main className="flex flex-col grow">
+        <div className="relative h-screen flex items-center overflow-hidden bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-white">
           <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiNmZmYiIGZpbGwtb3BhY2l0eT0iMC4wNSI+PHBhdGggZD0iTTM2IDE0YzAtMy4zMTQgMi42ODYtNiA2LTZzNiAyLjY4NiA2IDYtMi42ODYgNi02IDYtNi0yLjY4Ni02LTZ6TTEyIDM2YzAtMy4zMTQgMi42ODYtNiA2LTZzNiAyLjY4NiA2IDYtMi42ODYgNi02IDYtNi0yLjY4Ni02LTZ6Ii8+PC9nPjwvZz48L3N2Zz4=')] opacity-20"></div>
 
           <div className="relative mx-auto max-w-[1200px] px-4 sm:px-10 text-center">
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-black mb-6 tracking-tight">
+            <h1 className="js-reveal-hero text-4xl md:text-5xl lg:text-6xl font-black mb-6 tracking-tight">
               Nos <span className="text-primary">Réalisations</span>
             </h1>
-            <p className="text-lg md:text-xl text-slate-300 max-w-3xl mx-auto leading-relaxed">
+            <p className="js-reveal-hero text-lg md:text-xl text-slate-300 max-w-3xl mx-auto leading-relaxed">
               Découvrez nos interventions de débarras en Île-de-France.
               Chaque projet est unique et traité avec le plus grand soin.
             </p>
           </div>
+
+          <ScrollDownIndicator />
         </div>
 
-        <section className="py-12 md:py-16 px-4 sm:px-10 bg-slate-50 dark:bg-slate-900">
+        <section className="js-gallery-section py-12 md:py-16 px-4 sm:px-10 bg-slate-50 dark:bg-slate-900">
           <div className="mx-auto max-w-[1400px]">
             {realizations.length === 0 ? (
               <div className="text-center py-20">
@@ -94,7 +119,7 @@ export default function Realizations() {
                 {realizations.map((realization) => (
                   <div
                     key={realization.id}
-                    className="group bg-white dark:bg-slate-800 rounded-2xl overflow-hidden shadow-md hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2"
+                    className="js-reveal-gallery-card group bg-white dark:bg-slate-800 rounded-2xl overflow-hidden shadow-md hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2"
                   >
                     <div className="relative aspect-[4/3] overflow-hidden bg-slate-200 dark:bg-slate-700">
                       {realization.media_urls.length > 0 ? (

@@ -4,8 +4,10 @@ import EstimationWizard from '../components/EstimationWizard';
 import IleDeFranceMap from '../components/IleDeFranceMap';
 import ServiceModal from '../components/ServiceModal';
 import SEO from '../components/SEO';
+import ScrollDownIndicator from '../components/ScrollDownIndicator';
 import { useState } from 'react';
 import { localBusinessData, breadcrumbList } from '../lib/structuredData';
+import { usePageReveal } from '../hooks/usePageReveal';
 
 const departments = [
   { id: 'paris', name: 'Paris', code: '75' },
@@ -246,8 +248,17 @@ export default function Home() {
     },
   ];
 
+  const revealRoot = usePageReveal([
+    { selector: '.js-reveal-hero', mode: 'load', translateY: 24, staggerMs: 120 },
+    { selector: '.js-reveal-estimation', container: '.js-estimation-section' },
+    { selector: '.js-reveal-feature-card', container: '.js-features-section', staggerMs: 100 },
+    { selector: '.js-reveal-service-card', container: '.js-services-section', staggerMs: 100 },
+    { selector: '.js-reveal-cta', container: '.js-reveal-cta', translateY: 20, scaleFrom: 0.97 },
+    { selector: '.js-reveal-zone', container: '.js-reveal-zone' },
+  ]);
+
   return (
-    <div>
+    <div ref={revealRoot}>
       <SEO
         title="Débarras Rapide et Professionnel en Île-de-France"
         description="Vidébarras : service de débarras professionnel en Île-de-France (Paris 75, 77, 78, 91, 92, 93, 94, 95). Débarras appartement, maison, cave, grenier, bureaux. Devis gratuit sous 24h, intervention rapide, tri écologique."
@@ -263,7 +274,7 @@ export default function Home() {
           ],
         }}
       />
-      <section className="relative min-h-[700px] flex items-center py-32 px-4 sm:px-6 lg:px-8">
+      <section className="relative h-screen flex items-center px-4 sm:px-6 lg:px-8">
         <div
           className="absolute inset-0 z-0"
           style={{
@@ -277,18 +288,18 @@ export default function Home() {
 
         <div className="max-w-7xl mx-auto relative z-10">
           <div className="max-w-3xl">
-            <div className="mb-6">
+            <div className="mb-6 js-reveal-hero">
               <span className="inline-block px-6 py-2 bg-primary/20 backdrop-blur-sm text-white text-sm font-semibold rounded-full border border-primary/30">
                 Votre Expert en Débarras
               </span>
             </div>
-            <h1 className="text-5xl md:text-7xl font-bold text-white mb-8 leading-tight">
+            <h1 className="text-5xl md:text-7xl font-bold text-white mb-8 leading-tight js-reveal-hero">
               Libérez votre espace, simplifiez votre vie
             </h1>
-            <p className="text-xl md:text-2xl text-gray-200 mb-12 leading-relaxed">
+            <p className="text-xl md:text-2xl text-gray-200 mb-12 leading-relaxed js-reveal-hero">
               Débarras professionnel en Île-de-France. Rapide, efficace et respectueux de l'environnement.
             </p>
-            <div className="flex flex-col sm:flex-row gap-4">
+            <div className="flex flex-col sm:flex-row gap-4 js-reveal-hero">
               <Link
                 to="/contact"
                 className="inline-flex items-center justify-center px-8 py-4 text-lg font-semibold text-white bg-primary hover:bg-blue-600 transition-colors rounded-lg shadow-xl"
@@ -305,11 +316,13 @@ export default function Home() {
             </div>
           </div>
         </div>
+
+        <ScrollDownIndicator />
       </section>
 
-      <section className="py-24 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-white to-gray-50">
+      <section className="js-estimation-section py-24 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-white to-gray-50">
         <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-16">
+          <div className="text-center mb-16 js-reveal-estimation">
             <h2 className="text-4xl font-bold text-black mb-6">
               Obtenez votre estimation en 2 minutes
             </h2>
@@ -317,11 +330,13 @@ export default function Home() {
               Répondez à quelques questions simples pour recevoir une estimation gratuite et sans engagement
             </p>
           </div>
-          <EstimationWizard />
+          <div className="js-reveal-estimation">
+            <EstimationWizard />
+          </div>
         </div>
       </section>
 
-      <section className="py-24 px-4 sm:px-6 lg:px-8">
+      <section className="js-features-section py-24 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-20">
             <h2 className="text-4xl font-bold text-black mb-6">
@@ -336,7 +351,7 @@ export default function Home() {
             {features.map((feature, index) => (
               <div
                 key={index}
-                className="group relative bg-gradient-to-br from-white to-gray-50 p-8 rounded-3xl border border-gray-200/50 hover:border-primary/30 shadow-sm hover:shadow-2xl transition-all duration-500 overflow-hidden"
+                className="js-reveal-feature-card group relative bg-gradient-to-br from-white to-gray-50 p-8 rounded-3xl border border-gray-200/50 hover:border-primary/30 shadow-sm hover:shadow-2xl transition-all duration-500 overflow-hidden"
               >
                 <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
                 <div className="relative z-10">
@@ -357,7 +372,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="bg-gray-50 py-24 px-4 sm:px-6 lg:px-8">
+      <section className="js-services-section bg-gray-50 py-24 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
             <h2 className="text-4xl font-bold text-black mb-6">
@@ -373,7 +388,7 @@ export default function Home() {
               <div
                 key={index}
                 onClick={() => openServiceModal(service.serviceType)}
-                className="group relative rounded-3xl overflow-hidden transition-all duration-500 hover:scale-[1.02] cursor-pointer"
+                className="js-reveal-service-card group relative rounded-3xl overflow-hidden transition-all duration-500 hover:scale-[1.02] cursor-pointer"
               >
                 <div className="relative h-[400px] overflow-hidden">
                   <img
@@ -413,7 +428,7 @@ export default function Home() {
             ))}
           </div>
 
-          <div className="max-w-4xl mx-auto bg-gradient-to-br from-primary to-blue-600 p-12 rounded-3xl text-white text-center">
+          <div className="js-reveal-cta max-w-4xl mx-auto bg-gradient-to-br from-primary to-blue-600 p-12 rounded-3xl text-white text-center">
             <h3 className="text-3xl font-bold mb-6">
               Devis gratuit en 24h
             </h3>
@@ -455,7 +470,7 @@ export default function Home() {
       </section>
 
       <section className="py-24 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-white to-gray-50">
-        <div className="max-w-5xl mx-auto text-center">
+        <div className="js-reveal-zone max-w-5xl mx-auto text-center">
           <InteractiveMap />
         </div>
       </section>
