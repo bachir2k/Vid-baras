@@ -2,7 +2,9 @@ import { Link } from 'react-router-dom';
 import { ChevronDown } from 'lucide-react';
 import { useState } from 'react';
 import SEO from '../components/SEO';
+import ScrollDownIndicator from '../components/ScrollDownIndicator';
 import { faqData, breadcrumbList } from '../lib/structuredData';
+import { usePageReveal } from '../hooks/usePageReveal';
 
 const faqs = [
   {
@@ -91,8 +93,14 @@ export default function FAQ() {
 
   const categories = Array.from(new Set(faqs.map((faq) => faq.category)));
 
+  const revealRoot = usePageReveal([
+    { selector: '.js-reveal-hero', mode: 'load', translateY: 20, staggerMs: 100 },
+    { selector: '.js-reveal-faq-group', container: '.js-faq-list', staggerMs: 60 },
+    { selector: '.js-reveal-cta', container: '.js-reveal-cta' },
+  ]);
+
   return (
-    <div>
+    <div ref={revealRoot}>
       <SEO
         title="Questions Fréquentes sur le Débarras"
         description="Toutes les réponses à vos questions sur nos services de débarras en Île-de-France : tarifs, délais, zones d'intervention, démarches. Devis gratuit et conseils d'experts."
@@ -110,15 +118,17 @@ export default function FAQ() {
         }}
       />
 
-      <section className="bg-gradient-to-br from-primary to-blue-600 text-white py-24 px-4 sm:px-6 lg:px-8">
+      <section className="relative h-screen flex items-center bg-gradient-to-br from-primary to-blue-600 text-white px-4 sm:px-6 lg:px-8">
         <div className="max-w-4xl mx-auto text-center">
-          <h1 className="text-4xl md:text-5xl font-bold mb-6">
+          <h1 className="js-reveal-hero text-4xl md:text-5xl font-bold mb-6">
             Questions Fréquentes
           </h1>
-          <p className="text-xl text-white/90 leading-relaxed">
+          <p className="js-reveal-hero text-xl text-white/90 leading-relaxed">
             Toutes les réponses à vos questions sur nos services de débarras en Île-de-France
           </p>
         </div>
+
+        <ScrollDownIndicator />
       </section>
 
       <section className="py-16 px-4 sm:px-6 lg:px-8">
@@ -132,8 +142,9 @@ export default function FAQ() {
             </p>
           </div>
 
+          <div className="js-faq-list">
           {categories.map((category) => (
-            <div key={category} className="mb-12">
+            <div key={category} className="js-reveal-faq-group mb-12">
               <h2 className="text-2xl font-bold text-slate-900 mb-6 pb-3 border-b-2 border-primary">
                 {category}
               </h2>
@@ -177,10 +188,11 @@ export default function FAQ() {
               </div>
             </div>
           ))}
+          </div>
         </div>
       </section>
 
-      <section className="bg-gradient-to-br from-primary to-blue-600 text-white py-16 px-4 sm:px-6 lg:px-8">
+      <section className="js-reveal-cta bg-gradient-to-br from-primary to-blue-600 text-white py-16 px-4 sm:px-6 lg:px-8">
         <div className="max-w-4xl mx-auto text-center">
           <h2 className="text-3xl font-bold mb-6">
             Besoin d'un devis personnalisé ?

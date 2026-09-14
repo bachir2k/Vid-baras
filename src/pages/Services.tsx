@@ -2,11 +2,22 @@ import { Link } from 'react-router-dom';
 import FloatingContact from '../components/FloatingContact';
 import ServicesSection from '../components/ServicesSection';
 import SEO from '../components/SEO';
+import ScrollDownIndicator from '../components/ScrollDownIndicator';
 import { serviceData, breadcrumbList } from '../lib/structuredData';
+import { usePageReveal } from '../hooks/usePageReveal';
 
 export default function Services() {
+  const revealRoot = usePageReveal([
+    { selector: '.js-reveal-hero', mode: 'load', translateY: 22, staggerMs: 110 },
+    { selector: '.js-reveal-contact-card', container: '.js-contact-section', staggerMs: 90 },
+    { selector: '.js-reveal-value-card', container: '.js-values-section', staggerMs: 100 },
+    { selector: '.js-reveal-eco', container: '.js-eco-section', staggerMs: 100 },
+    { selector: '.js-reveal-team-card', container: '.js-team-section', staggerMs: 90 },
+    { selector: '.js-reveal-cta', container: '.js-reveal-cta' },
+  ]);
+
   return (
-    <div className="relative flex h-auto min-h-screen w-full flex-col overflow-x-hidden">
+    <div ref={revealRoot} className="relative flex h-auto min-h-screen w-full flex-col overflow-x-hidden">
       <SEO
         title="Nos Services de Débarras en Île-de-France"
         description="Découvrez tous nos services de débarras : appartement, maison, cave, grenier, bureaux, locaux professionnels, syndrome de Diogène. Service clé en main, rapide et écologique en Île-de-France (75, 92, 93, 94, 77, 78, 91, 95)."
@@ -33,42 +44,40 @@ export default function Services() {
       `}</style>
 
       <main className="flex flex-col grow">
-        <div className="px-4 py-8 sm:px-10 md:py-12 bg-background-light dark:bg-background-dark">
-          <div className="mx-auto max-w-[1200px]">
-            <div
-              className="relative overflow-hidden rounded-2xl bg-slate-900 text-white min-h-[480px] flex flex-col items-center justify-center p-8 text-center"
-              role="img"
-              aria-label="Équipe professionnelle de déménagement souriante"
-              style={{
-                backgroundImage: 'linear-gradient(rgba(0, 0, 0, 0.4) 0%, rgba(0, 0, 0, 0.6) 100%), url("https://lh3.googleusercontent.com/aida-public/AB6AXuCpDFSDopBdXE8LqGBMVzeXtdW0djllFOLybTW0c-4nv9eHc4XcUOWx0glZpsc0afrG50H4Eq6A_zF35zuUxH7ybW_2NxHNzH6A-ju_ylvEFeSSvJz1_omBXrYkbpMr8SgTj-ZndHS6jDTM4rrRxC47lTnn7sEmke96RfQ80-tlIYxAzfCpEbx0Zo0Uw0PpfFb6dpg5wOoUXL14IiY2HTDwjQb9Gn2jUgUjGBmmoIkxbKEtd-AVS-ghcsUr5xOSrjDI1Q8hCai3khSh")',
-                backgroundSize: 'cover',
-                backgroundPosition: 'center'
-              }}
-            >
-              <div className="max-w-[720px] flex flex-col gap-6 animate-fade-in-up">
-                <h1 className="text-4xl md:text-5xl lg:text-6xl font-black leading-tight tracking-tight">
-                  <span className="text-primary">Videbarras</span> Team
-                </h1>
-                <p className="text-lg md:text-xl font-medium text-slate-200 leading-relaxed">
-                  Que vous soyez particulier ou professionnel, nous intervenons rapidement pour vider, trier et nettoyer vos espaces encombrés. Service clé en main et éco-responsable.
-                </p>
-                <div className="flex flex-col sm:flex-row justify-center gap-4 mt-4">
-                  <Link
-                    to="/contact"
-                    className="flex items-center justify-center h-12 px-8 rounded-lg bg-primary hover:bg-primary/90 text-white font-bold text-base transition-colors shadow-lg"
-                  >
-                    Demander un devis
-                  </Link>
-                  <Link
-                    to="/realisations"
-                    className="h-12 px-8 rounded-lg bg-white/10 hover:bg-white/20 backdrop-blur-sm text-white font-bold text-base border border-white/30 transition-colors flex items-center justify-center"
-                  >
-                    Voir nos réalisations
-                  </Link>
-                </div>
-              </div>
+        <div
+          className="relative h-screen w-full flex flex-col items-center justify-center p-8 text-center text-white overflow-hidden"
+          role="img"
+          aria-label="Équipe professionnelle de déménagement souriante"
+          style={{
+            backgroundImage: 'linear-gradient(rgba(0, 0, 0, 0.4) 0%, rgba(0, 0, 0, 0.6) 100%), url("https://lh3.googleusercontent.com/aida-public/AB6AXuCpDFSDopBdXE8LqGBMVzeXtdW0djllFOLybTW0c-4nv9eHc4XcUOWx0glZpsc0afrG50H4Eq6A_zF35zuUxH7ybW_2NxHNzH6A-ju_ylvEFeSSvJz1_omBXrYkbpMr8SgTj-ZndHS6jDTM4rrRxC47lTnn7sEmke96RfQ80-tlIYxAzfCpEbx0Zo0Uw0PpfFb6dpg5wOoUXL14IiY2HTDwjQb9Gn2jUgUjGBmmoIkxbKEtd-AVS-ghcsUr5xOSrjDI1Q8hCai3khSh")',
+            backgroundSize: 'cover',
+            backgroundPosition: 'center'
+          }}
+        >
+          <div className="max-w-[720px] flex flex-col gap-6">
+            <h1 className="js-reveal-hero text-4xl md:text-5xl lg:text-6xl font-black leading-tight tracking-tight">
+              <span className="text-primary">Videbarras</span> Team
+            </h1>
+            <p className="js-reveal-hero text-lg md:text-xl font-medium text-slate-200 leading-relaxed">
+              Que vous soyez particulier ou professionnel, nous intervenons rapidement pour vider, trier et nettoyer vos espaces encombrés. Service clé en main et éco-responsable.
+            </p>
+            <div className="js-reveal-hero flex flex-col sm:flex-row justify-center gap-4 mt-4">
+              <Link
+                to="/contact"
+                className="flex items-center justify-center h-12 px-8 rounded-lg bg-primary hover:bg-primary/90 text-white font-bold text-base transition-colors shadow-lg"
+              >
+                Demander un devis
+              </Link>
+              <Link
+                to="/realisations"
+                className="h-12 px-8 rounded-lg bg-white/10 hover:bg-white/20 backdrop-blur-sm text-white font-bold text-base border border-white/30 transition-colors flex items-center justify-center"
+              >
+                Voir nos réalisations
+              </Link>
             </div>
           </div>
+
+          <ScrollDownIndicator />
         </div>
 
         <section className="py-12 md:py-16 px-4 sm:px-10">
@@ -88,7 +97,7 @@ export default function Services() {
 
         <ServicesSection />
 
-        <section className="py-12 md:py-16 px-4 sm:px-10 bg-gradient-to-br from-primary/5 to-blue-50 dark:from-primary/10 dark:to-slate-900">
+        <section className="js-contact-section py-12 md:py-16 px-4 sm:px-10 bg-gradient-to-br from-primary/5 to-blue-50 dark:from-primary/10 dark:to-slate-900">
           <div className="mx-auto max-w-[960px]">
             <div className="text-center mb-10">
               <h2 className="text-3xl md:text-4xl font-bold text-slate-900 dark:text-white mb-4">
@@ -104,7 +113,7 @@ export default function Services() {
                 href="https://wa.me/+33695257352?text=Bonjour%2C%20je%20souhaite%20un%20renseignement%20pour%20un%20d%C3%A9barras."
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group bg-white dark:bg-slate-800 rounded-2xl p-6 shadow-md hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 border-2 border-transparent hover:border-green-500"
+                className="js-reveal-contact-card group bg-white dark:bg-slate-800 rounded-2xl p-6 shadow-md hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 border-2 border-transparent hover:border-green-500"
               >
                 <div className="flex flex-col items-center text-center gap-4">
                   <div className="w-16 h-16 rounded-full bg-green-100 dark:bg-green-900/30 flex items-center justify-center group-hover:scale-110 transition-transform">
@@ -121,7 +130,7 @@ export default function Services() {
 
               <a
                 href="tel:+33695257352"
-                className="group bg-white dark:bg-slate-800 rounded-2xl p-6 shadow-md hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 border-2 border-transparent hover:border-blue-500"
+                className="js-reveal-contact-card group bg-white dark:bg-slate-800 rounded-2xl p-6 shadow-md hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 border-2 border-transparent hover:border-blue-500"
               >
                 <div className="flex flex-col items-center text-center gap-4">
                   <div className="w-16 h-16 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center group-hover:scale-110 transition-transform">
@@ -138,7 +147,7 @@ export default function Services() {
 
               <a
                 href="mailto:Contact@vidédarras.fr"
-                className="group bg-white dark:bg-slate-800 rounded-2xl p-6 shadow-md hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 border-2 border-transparent hover:border-red-500"
+                className="js-reveal-contact-card group bg-white dark:bg-slate-800 rounded-2xl p-6 shadow-md hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 border-2 border-transparent hover:border-red-500"
               >
                 <div className="flex flex-col items-center text-center gap-4">
                   <div className="w-16 h-16 rounded-full bg-red-100 dark:bg-red-900/30 flex items-center justify-center group-hover:scale-110 transition-transform">
@@ -157,7 +166,7 @@ export default function Services() {
                 href="https://www.tiktok.com/@videbarras"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group bg-white dark:bg-slate-800 rounded-2xl p-6 shadow-md hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 border-2 border-transparent hover:border-gray-900 dark:hover:border-gray-700"
+                className="js-reveal-contact-card group bg-white dark:bg-slate-800 rounded-2xl p-6 shadow-md hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 border-2 border-transparent hover:border-gray-900 dark:hover:border-gray-700"
               >
                 <div className="flex flex-col items-center text-center gap-4">
                   <div className="w-16 h-16 rounded-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center group-hover:scale-110 transition-transform">
@@ -181,7 +190,7 @@ export default function Services() {
           </div>
         </section>
 
-        <section className="py-12 bg-white dark:bg-slate-900 border-y border-slate-100 dark:border-slate-800">
+        <section className="js-values-section py-12 bg-white dark:bg-slate-900 border-y border-slate-100 dark:border-slate-800">
           <div className="mx-auto max-w-[1200px] px-4 sm:px-10">
             <div className="flex flex-col gap-10">
               <div className="text-center sm:text-left">
@@ -191,7 +200,7 @@ export default function Services() {
                 </p>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div className="group flex flex-col gap-4 rounded-xl border border-slate-200 dark:border-slate-700 bg-background-light dark:bg-slate-800 p-6 hover:shadow-md transition-shadow">
+                <div className="js-reveal-value-card group flex flex-col gap-4 rounded-xl border border-slate-200 dark:border-slate-700 bg-background-light dark:bg-slate-800 p-6 hover:shadow-md transition-shadow">
                   <div className="size-12 rounded-full bg-green-100 dark:bg-green-900/30 flex items-center justify-center text-green-600 dark:text-green-400">
                     <span className="material-symbols-outlined">eco</span>
                   </div>
@@ -202,7 +211,7 @@ export default function Services() {
                     </p>
                   </div>
                 </div>
-                <div className="group flex flex-col gap-4 rounded-xl border border-slate-200 dark:border-slate-700 bg-background-light dark:bg-slate-800 p-6 hover:shadow-md transition-shadow">
+                <div className="js-reveal-value-card group flex flex-col gap-4 rounded-xl border border-slate-200 dark:border-slate-700 bg-background-light dark:bg-slate-800 p-6 hover:shadow-md transition-shadow">
                   <div className="size-12 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center text-primary">
                     <span className="material-symbols-outlined">work</span>
                   </div>
@@ -213,7 +222,7 @@ export default function Services() {
                     </p>
                   </div>
                 </div>
-                <div className="group flex flex-col gap-4 rounded-xl border border-slate-200 dark:border-slate-700 bg-background-light dark:bg-slate-800 p-6 hover:shadow-md transition-shadow">
+                <div className="js-reveal-value-card group flex flex-col gap-4 rounded-xl border border-slate-200 dark:border-slate-700 bg-background-light dark:bg-slate-800 p-6 hover:shadow-md transition-shadow">
                   <div className="size-12 rounded-full bg-red-100 dark:bg-red-900/30 flex items-center justify-center text-red-500">
                     <span className="material-symbols-outlined">favorite</span>
                   </div>
@@ -301,7 +310,7 @@ export default function Services() {
           </div>
         </section>
 
-        <section className="relative py-16 px-4 sm:px-10 overflow-hidden">
+        <section className="js-eco-section relative py-16 px-4 sm:px-10 overflow-hidden">
           <div className="absolute inset-0 z-0">
             <div
               className="w-full h-full bg-cover  bg-center"
@@ -316,7 +325,7 @@ export default function Services() {
             <div className="absolute inset-0 bg-green-50/80 dark:bg-green-950/80 backdrop-blur-[2px]"></div>
           </div>
           <div className="relative z-10 mx-auto max-w-[1200px] flex flex-col md:flex-row items-center gap-10">
-            <div className="flex-1 space-y-6">
+            <div className="js-reveal-eco flex-1 space-y-6">
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-green-100 dark:bg-green-900 text-green-700 dark:text-green-300 text-sm font-bold">
                 <span className="material-symbols-outlined text-sm">recycling</span>
                 Engagement Écologique
@@ -340,7 +349,7 @@ export default function Services() {
                 </li>
               </ul>
             </div>
-            <div className="flex-1 h-64 md:h-80 w-full relative rounded-xl overflow-hidden shadow-xl">
+            <div className="js-reveal-eco flex-1 h-64 md:h-80 w-full relative rounded-xl overflow-hidden shadow-xl">
               <div
                 className="w-full h-full bg-cover  bg-center"
                 role="img"
@@ -354,14 +363,14 @@ export default function Services() {
           </div>
         </section>
 
-        <section className="py-16 px-4 sm:px-10 bg-white dark:bg-slate-900">
+        <section className="js-team-section py-16 px-4 sm:px-10 bg-white dark:bg-slate-900">
           <div className="mx-auto max-w-[1200px] text-center">
             <h2 className="text-3xl font-bold text-slate-900 dark:text-white mb-4">L'équipe qui déplace des montagnes</h2>
             <p className="text-slate-600 dark:text-slate-400 max-w-2xl mx-auto mb-12">
               Derrière chaque carton soulevé se cache une personne dévouée. Découvrez les visages de Vidébarras.
             </p>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-              <div className="flex flex-col items-center gap-4">
+              <div className="js-reveal-team-card flex flex-col items-center gap-4">
                 <div className="size-32 rounded-full overflow-hidden border-4 border-slate-100 dark:border-slate-800 shadow-lg">
                   <div
                     className="w-full h-full bg-cover  bg-center"
@@ -380,7 +389,7 @@ export default function Services() {
                 </div>
               </div>
 
-              <div className="flex flex-col items-center gap-4">
+              <div className="js-reveal-team-card flex flex-col items-center gap-4">
                 <div className="size-32 rounded-full overflow-hidden border-4 border-slate-100 dark:border-slate-800 shadow-lg">
                   <div
                     className="w-full h-full bg-cover  bg-center"
@@ -399,7 +408,7 @@ export default function Services() {
                 </div>
               </div>
 
-              <div className="flex flex-col items-center gap-4">
+              <div className="js-reveal-team-card flex flex-col items-center gap-4">
                 <div className="size-32 rounded-full overflow-hidden border-4 border-slate-100 dark:border-slate-800 shadow-lg">
                   <div
                     className="w-full h-full bg-cover  bg-center"
@@ -418,7 +427,7 @@ export default function Services() {
                 </div>
               </div>
 
-              <div className="flex flex-col items-center gap-4">
+              <div className="js-reveal-team-card flex flex-col items-center gap-4">
                 <div className="size-32 rounded-full overflow-hidden border-4 border-slate-100 dark:border-slate-800 shadow-lg">
                   <div
                     className="w-full h-full bg-cover  bg-center"
@@ -441,7 +450,7 @@ export default function Services() {
         </section>
 
         <section className="bg-primary dark:bg-primary/90 text-white py-12 px-4 sm:px-10">
-          <div className="mx-auto max-w-[1200px] flex flex-col md:flex-row items-center justify-between gap-8">
+          <div className="js-reveal-cta mx-auto max-w-[1200px] flex flex-col md:flex-row items-center justify-between gap-8">
             <div className="text-center md:text-left">
               <h2 className="text-2xl md:text-3xl font-bold mb-2">Prêt à faire de la place ?</h2>
               <p className="text-white/90 text-lg">Recevez votre estimation gratuite en moins de 24h.</p>
