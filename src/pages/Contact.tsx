@@ -90,6 +90,23 @@ export default function Contact() {
 
       if (error) throw error;
 
+      // Notification par email (fonction Edge dédiée au formulaire de contact).
+      // Non bloquant : la demande est déjà enregistrée ci-dessus même si l'email échoue.
+      const { error: mailError } = await supabase.functions.invoke('devis-mail', {
+        body: {
+          name: formData.name,
+          phone: formData.phone,
+          email: formData.email,
+          property_type: formData.propertyType,
+          surface: formData.surface || null,
+          message: formData.message || null,
+        },
+      });
+
+      if (mailError) {
+        console.error('Erreur lors de l\'envoi de l\'email de notification (devis-mail):', mailError);
+      }
+
       setIsSubmitted(true);
     } catch (err) {
       console.error('Erreur lors de l\'envoi du formulaire de contact:', err);
