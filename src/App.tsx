@@ -15,10 +15,14 @@ function App() {
       <Layout>
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/services" element={<Services />} />
+          {/* Le contenu de Services.tsx est en réalité la page "équipe/à propos"
+              (hero "Videbarras Team", histoire, bios) et celui de About.tsx est
+              en réalité le catalogue de services (tabs Particuliers/Professionnels) —
+              les deux étaient inversés par rapport à leur URL. */}
+          <Route path="/services" element={<About />} />
           <Route path="/realisations" element={<Realizations />} />
           <Route path="/contact" element={<Contact />} />
-          <Route path="/about" element={<About />} />
+          <Route path="/about" element={<Services />} />
           <Route path="/faq" element={<FAQ />} />
         </Routes>
       </Layout>
