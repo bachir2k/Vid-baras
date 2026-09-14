@@ -2,6 +2,7 @@ import { useState } from 'react';
 import HeroVideo from '../components/HeroVideo';
 import SEO from '../components/SEO';
 import { usePageReveal } from '../hooks/usePageReveal';
+import { serviceData, breadcrumbList } from '../lib/structuredData';
 
 interface ServiceCardData {
   icon: string;
@@ -113,8 +114,20 @@ export default function About() {
   return (
     <>
       <SEO
-        title="À propos de nous - Expert du Débarras"
-        description="Découvrez l'histoire, la méthode (en 3 étapes) et les engagements écologiques de Vidébarras, votre partenaire de confiance en Île-de-France."
+        title="Nos Services de Débarras en Île-de-France"
+        description="Découvrez tous nos services de débarras : appartement, maison, cave, grenier, bureaux, locaux professionnels, syndrome de Diogène. Service clé en main, rapide et écologique en Île-de-France (75, 92, 93, 94, 77, 78, 91, 95)."
+        keywords="débarras appartement paris, débarras maison ile de france, débarras cave 92, débarras grenier 93, débarras bureau 94, débarras professionnel, débarras commercial, syndrome diogène, nettoyage après débarras, vider appartement paris"
+        canonical="https://videbarras.fr/services"
+        structuredData={{
+          '@context': 'https://schema.org',
+          '@graph': [
+            serviceData,
+            breadcrumbList([
+              { name: 'Accueil', url: 'https://videbarras.fr' },
+              { name: 'Services', url: 'https://videbarras.fr/services' },
+            ]),
+          ],
+        }}
       />
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap');

@@ -19,17 +19,17 @@ export default function Services() {
   return (
     <div ref={revealRoot} className="relative flex h-auto min-h-screen w-full flex-col overflow-x-hidden">
       <SEO
-        title="Nos Services de Débarras en Île-de-France"
-        description="Découvrez tous nos services de débarras : appartement, maison, cave, grenier, bureaux, locaux professionnels, syndrome de Diogène. Service clé en main, rapide et écologique en Île-de-France (75, 92, 93, 94, 77, 78, 91, 95)."
-        keywords="débarras appartement paris, débarras maison ile de france, débarras cave 92, débarras grenier 93, débarras bureau 94, débarras professionnel, débarras commercial, syndrome diogène, nettoyage après débarras, vider appartement paris"
-        canonical="https://videbarras.fr/services"
+        title="Videbarras Team - Notre histoire et notre équipe"
+        description="Découvrez l'histoire de Vidébarras, notre mission, nos valeurs écologiques et l'équipe qui intervient chaque jour en Île-de-France pour vos débarras."
+        keywords="équipe débarras, à propos vidébarras, histoire débarras, entreprise débarras ile de france, valeurs écologiques débarras"
+        canonical="https://videbarras.fr/about"
         structuredData={{
           '@context': 'https://schema.org',
           '@graph': [
             serviceData,
             breadcrumbList([
               { name: 'Accueil', url: 'https://videbarras.fr' },
-              { name: 'Services', url: 'https://videbarras.fr/services' },
+              { name: 'Videbarras team', url: 'https://videbarras.fr/about' },
             ]),
           ],
         }}
