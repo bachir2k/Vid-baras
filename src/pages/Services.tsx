@@ -1,6 +1,5 @@
 import { Link } from 'react-router-dom';
 import FloatingContact from '../components/FloatingContact';
-import ServicesSection from '../components/ServicesSection';
 import SEO from '../components/SEO';
 import ScrollDownIndicator from '../components/ScrollDownIndicator';
 import { serviceData, breadcrumbList } from '../lib/structuredData';
@@ -94,8 +93,6 @@ export default function Services() {
             </p>
           </div>
         </section>
-
-        <ServicesSection />
 
         <section className="js-contact-section py-12 md:py-16 px-4 sm:px-10 bg-gradient-to-br from-primary/5 to-blue-50 dark:from-primary/10 dark:to-slate-900">
           <div className="mx-auto max-w-[960px]">
