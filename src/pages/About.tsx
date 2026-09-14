@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import HeroVideo from '../components/HeroVideo';
 import SEO from '../components/SEO';
+import ServiceModal from '../components/ServiceModal';
 import { usePageReveal } from '../hooks/usePageReveal';
 import { serviceData, breadcrumbList } from '../lib/structuredData';
 
@@ -11,6 +12,8 @@ interface ServiceCardData {
   title: string;
   description: string;
   bullets: [string, string];
+  /** Clé attendue par ServiceModal pour afficher le détail de ce service. */
+  serviceKey: string;
 }
 
 const servicesByClientType: Record<'particuliers' | 'professionnels', ServiceCardData[]> = {
@@ -22,6 +25,7 @@ const servicesByClientType: Record<'particuliers' | 'professionnels', ServiceCar
       title: 'Débarras de Maison',
       description: "Service complet pour succession, déménagement ou vente immobilière. Nous vidons intégralement votre maison, de la cave au grenier.",
       bullets: ['Toutes superficies', 'Tri sélectif inclus'],
+      serviceKey: 'maison',
     },
     {
       icon: 'apartment',
@@ -30,6 +34,7 @@ const servicesByClientType: Record<'particuliers' | 'professionnels', ServiceCar
       title: "Débarras d'Appartement",
       description: 'Intervention en étage, accès difficile, avec ou sans ascenseur. Nous adaptons nos moyens logistiques à votre copropriété.',
       bullets: ['Protection des parties communes', 'Monte-meuble si nécessaire'],
+      serviceKey: 'appartement',
     },
     {
       icon: 'warehouse',
@@ -38,6 +43,7 @@ const servicesByClientType: Record<'particuliers' | 'professionnels', ServiceCar
       title: 'Caves & Greniers',
       description: "Récupérez de l'espace précieux. Nous trions et évacuons les encombrants accumulés au fil des années dans vos espaces de stockage.",
       bullets: ['Nettoyage après débarras', "Destruction d'archives"],
+      serviceKey: 'cave',
     },
     {
       icon: 'warning',
@@ -46,6 +52,7 @@ const servicesByClientType: Record<'particuliers' | 'professionnels', ServiceCar
       title: 'Syndrome de Diogène',
       description: "Intervention spécialisée pour l'accumulation compulsive. Nettoyage extrême, désinfection et remise en état de l'habitation.",
       bullets: ['Discrétion assurée', 'Protocole de désinfection'],
+      serviceKey: 'diogene',
     },
   ],
   professionnels: [
@@ -56,6 +63,7 @@ const servicesByClientType: Record<'particuliers' | 'professionnels', ServiceCar
       title: 'Bureaux & Locaux',
       description: "Déménagement d'entreprise, cessation d'activité ou renouvellement de mobilier. Débarras rapide de vos espaces de travail.",
       bullets: ['Recyclage matériel informatique', 'Certificat de destruction'],
+      serviceKey: 'bureaux',
     },
     {
       icon: 'storefront',
@@ -64,11 +72,12 @@ const servicesByClientType: Record<'particuliers' | 'professionnels', ServiceCar
       title: 'Commerces & Boutiques',
       description: "Remise au propre de locaux commerciaux avant état des lieux ou travaux. Évacuation de rayonnages, PLV et stocks invendus.",
       bullets: ['Intervention heures creuses', 'Valorisation des déchets'],
+      serviceKey: 'commerces',
     },
   ],
 };
 
-function ServiceCard({ service }: { service: ServiceCardData }) {
+function ServiceCard({ service, onLearnMore }: { service: ServiceCardData; onLearnMore: (serviceKey: string) => void }) {
   return (
     <div className="js-reveal-service-card group flex flex-col bg-background-light dark:bg-slate-800 rounded-2xl overflow-hidden hover:shadow-xl transition-shadow duration-300 border border-slate-100 dark:border-slate-700">
       <div className="h-48 overflow-hidden relative">
@@ -93,9 +102,13 @@ function ServiceCard({ service }: { service: ServiceCardData }) {
             </li>
           ))}
         </ul>
-        <a className="text-primary font-bold text-sm flex items-center gap-1 group-hover:gap-2 transition-all" href="#">
+        <button
+          type="button"
+          onClick={() => onLearnMore(service.serviceKey)}
+          className="text-primary font-bold text-sm flex items-center gap-1 group-hover:gap-2 transition-all"
+        >
           En savoir plus <span className="material-symbols-outlined !text-[16px]">arrow_forward</span>
-        </a>
+        </button>
       </div>
     </div>
   );
@@ -103,6 +116,11 @@ function ServiceCard({ service }: { service: ServiceCardData }) {
 
 export default function About() {
   const [clientType, setClientType] = useState<'particuliers' | 'professionnels'>('particuliers');
+  const [modalServiceKey, setModalServiceKey] = useState<string | null>(null);
+
+  const handleLearnMore = (serviceKey: string) => {
+    setModalServiceKey(serviceKey);
+  };
 
   const revealRoot = usePageReveal([
     { selector: '.js-reveal-steps', container: '.js-steps-section', staggerMs: 110 },
@@ -217,7 +235,7 @@ export default function About() {
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {servicesByClientType[clientType].map((service) => (
-                <ServiceCard key={service.title} service={service} />
+                <ServiceCard key={service.title} service={service} onLearnMore={handleLearnMore} />
               ))}
             </div>
           </div>
@@ -262,9 +280,14 @@ export default function About() {
             </div>
           </div>
         </div>
-
-        
       </div>
+
+      <ServiceModal
+        isOpen={modalServiceKey !== null}
+        onClose={() => setModalServiceKey(null)}
+        serviceType={modalServiceKey ?? ''}
+        clientType={clientType === 'professionnels' ? 'professionnel' : 'particulier'}
+      />
     </>
   );
 }
