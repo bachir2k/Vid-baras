@@ -5,6 +5,7 @@ import SEO from '../components/SEO';
 import ScrollDownIndicator from '../components/ScrollDownIndicator';
 import { faqData, breadcrumbList } from '../lib/structuredData';
 import { usePageReveal } from '../hooks/usePageReveal';
+import { trackPhoneClick } from '../lib/analytics';
 
 const faqs = [
   {
@@ -44,7 +45,7 @@ const faqs = [
   },
   {
     question: 'Comment obtenir un devis gratuit ?',
-    answer: 'Contactez-nous par téléphone au 07 69 18 12 64, par email à contact@videbarras.fr ou via notre formulaire en ligne. Nous pouvons établir un devis sur photos ou organiser une visite gratuite sur place. Vous recevrez votre estimation sous 24 heures.',
+    answer: 'Contactez-nous par téléphone au 06 95 25 73 52, par email à contact@vidébarras.fr ou via notre formulaire en ligne. Nous pouvons établir un devis sur photos ou organiser une visite gratuite sur place. Vous recevrez votre estimation sous 24 heures.',
     category: 'Devis',
   },
   {
@@ -209,6 +210,7 @@ export default function FAQ() {
             </Link>
             <a
               href="tel:+33695257352"
+              onClick={() => trackPhoneClick('faq_cta')}
               className="inline-flex items-center justify-center px-8 py-4 text-lg font-semibold text-white bg-white/10 hover:bg-white/20 transition-colors rounded-lg border-2 border-white/30"
             >
               06 95 25 73 52

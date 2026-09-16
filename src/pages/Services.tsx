@@ -4,6 +4,7 @@ import SEO from '../components/SEO';
 import ScrollDownIndicator from '../components/ScrollDownIndicator';
 import { serviceData, breadcrumbList } from '../lib/structuredData';
 import { usePageReveal } from '../hooks/usePageReveal';
+import { trackPhoneClick, trackWhatsappClick } from '../lib/analytics';
 
 export default function Services() {
   const revealRoot = usePageReveal([
@@ -369,6 +370,7 @@ export default function Services() {
                 href="https://wa.me/+33695257352?text=Bonjour%2C%20je%20souhaite%20un%20renseignement%20pour%20un%20d%C3%A9barras."
                 target="_blank"
                 rel="noopener noreferrer"
+                onClick={() => trackWhatsappClick('services_page')}
                 className="js-reveal-contact-card group bg-white dark:bg-slate-800 rounded-2xl p-6 shadow-md hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 border-2 border-transparent hover:border-green-500"
               >
                 <div className="flex flex-col items-center text-center gap-4">
@@ -386,6 +388,7 @@ export default function Services() {
 
               <a
                 href="tel:+33695257352"
+                onClick={() => trackPhoneClick('services_page')}
                 className="js-reveal-contact-card group bg-white dark:bg-slate-800 rounded-2xl p-6 shadow-md hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 border-2 border-transparent hover:border-blue-500"
               >
                 <div className="flex flex-col items-center text-center gap-4">
@@ -402,7 +405,7 @@ export default function Services() {
               </a>
 
               <a
-                href="mailto:Contact@vidédarras.fr"
+                href="mailto:contact@vidébarras.fr"
                 className="js-reveal-contact-card group bg-white dark:bg-slate-800 rounded-2xl p-6 shadow-md hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 border-2 border-transparent hover:border-red-500"
               >
                 <div className="flex flex-col items-center text-center gap-4">
@@ -419,7 +422,7 @@ export default function Services() {
               </a>
 
               <a
-                href="https://www.tiktok.com/@videbarras"
+                href="https://www.tiktok.com/@roiddebarras"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="js-reveal-contact-card group bg-white dark:bg-slate-800 rounded-2xl p-6 shadow-md hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 border-2 border-transparent hover:border-gray-900 dark:hover:border-gray-700"

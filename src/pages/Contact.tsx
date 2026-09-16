@@ -1,4 +1,5 @@
 import { useState, FormEvent } from 'react';
+import { useNavigate } from 'react-router-dom';
 import SEO from '../components/SEO';
 import ScrollDownIndicator from '../components/ScrollDownIndicator';
 import IleDeFranceMap from '../components/IleDeFranceMap';
@@ -12,6 +13,7 @@ import {
   type ContactFormData,
 } from '../lib/validation';
 import { usePageReveal } from '../hooks/usePageReveal';
+import { trackPhoneClick } from '../lib/analytics';
 
 const initialFormData: ContactFormData = {
   name: '',
@@ -23,10 +25,10 @@ const initialFormData: ContactFormData = {
 };
 
 export default function Contact() {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState<ContactFormData>(initialFormData);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isSubmitted, setIsSubmitted] = useState(false);
   const [submitError, setSubmitError] = useState('');
   const [hoveredDept, setHoveredDept] = useState<string | null>(null);
 
@@ -107,7 +109,12 @@ export default function Contact() {
         console.error('Erreur lors de l\'envoi de l\'email de notification (devis-mail):', mailError);
       }
 
-      setIsSubmitted(true);
+      navigate('/merci', {
+        state: {
+          name: formData.name,
+          phone: formData.phone,
+        },
+      });
     } catch (err) {
       console.error('Erreur lors de l\'envoi du formulaire de contact:', err);
       setSubmitError('Une erreur est survenue lors de l\'envoi. Veuillez réessayer ou nous appeler directement.');
@@ -120,7 +127,7 @@ export default function Contact() {
     <>
       <SEO
         title="Contact & Devis Gratuit"
-        description="Contactez Vidébarras pour un devis gratuit de débarras en Île-de-France. Téléphone : 07 69 18 12 64. Réponse rapide sous 24h, intervention dans toute l'Île-de-France (75, 92, 93, 94, 77, 78, 91, 95)."
+        description="Contactez Vidébarras pour un devis gratuit de débarras en Île-de-France. Téléphone : 06 95 25 73 52. Réponse rapide sous 24h, intervention dans toute l'Île-de-France (75, 92, 93, 94, 77, 78, 91, 95)."
         keywords="devis débarras gratuit, contact débarras paris, estimation débarras ile de france, prix débarras, tarif débarras appartement, devis débarras maison, téléphone débarras"
         canonical="https://videbarras.fr/contact"
         structuredData={{
@@ -173,6 +180,7 @@ export default function Contact() {
                 <div className="js-reveal-hero flex flex-col sm:flex-row items-center gap-4 mt-4">
                   <a
                     href="tel:+33695257352"
+                    onClick={() => trackPhoneClick('contact_hero')}
                     className="inline-flex items-center justify-center gap-2 px-8 py-4 text-lg font-bold text-white bg-primary hover:bg-blue-600 rounded-xl shadow-2xl transition-all duration-300 transform hover:scale-105"
                   >
                     <span className="material-symbols-outlined">call</span>
@@ -210,30 +218,11 @@ export default function Contact() {
               <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
                 <div className="lg:col-span-7 xl:col-span-8">
                   <div id="formulaire-devis" className="js-reveal-form bg-white dark:bg-[#1a2632] rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 p-6 sm:p-8 scroll-mt-24">
-                    {isSubmitted ? (
-                      <div className="text-center py-8">
-                        <div className="w-16 h-16 bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center mx-auto mb-6">
-                          <span className="material-symbols-outlined text-green-600 !text-[32px]">check_circle</span>
-                        </div>
-                        <h2 className="text-[#0d141b] dark:text-white text-2xl font-bold mb-3">Demande envoyée !</h2>
-                        <p className="text-[#4c739a] dark:text-gray-400 mb-8">
-                          Merci {formData.name}, nous avons bien reçu votre demande. Notre équipe vous recontactera sous 24h au {formData.phone}.
-                        </p>
-                        <button
-                          onClick={() => { setFormData(initialFormData); setIsSubmitted(false); }}
-                          className="px-8 py-3 bg-primary hover:bg-blue-600 text-white rounded-lg font-semibold transition-colors"
-                          type="button"
-                        >
-                          Envoyer une nouvelle demande
-                        </button>
-                      </div>
-                    ) : (
-                      <>
-                        <div className="mb-8">
-                          <h2 className="text-[#0d141b] dark:text-white text-2xl font-bold leading-tight mb-2">Demande de devis gratuit</h2>
-                          <p className="text-[#4c739a] dark:text-gray-400">Remplissez le formulaire ci-dessous pour recevoir une estimation précise.</p>
-                        </div>
-                        <form className="flex flex-col gap-6" onSubmit={handleSubmit} noValidate>
+                    <div className="mb-8">
+                      <h2 className="text-[#0d141b] dark:text-white text-2xl font-bold leading-tight mb-2">Demande de devis gratuit</h2>
+                      <p className="text-[#4c739a] dark:text-gray-400">Remplissez le formulaire ci-dessous pour recevoir une estimation précise.</p>
+                    </div>
+                    <form className="flex flex-col gap-6" onSubmit={handleSubmit} noValidate>
                           {submitError && (
                             <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-red-700 dark:text-red-400 text-sm rounded-lg px-4 py-3">
                               {submitError}
@@ -331,11 +320,9 @@ export default function Contact() {
                               <span className="material-symbols-outlined">send</span>
                               {isSubmitting ? 'Envoi en cours...' : 'Envoyer ma demande'}
                             </button>
-                            <p className="text-xs text-gray-400 mt-3 text-center md:text-left">* Vos données personnelles sont confidentielles et ne seront jamais partagées.</p>
-                          </div>
-                        </form>
-                      </>
-                    )}
+                          <p className="text-xs text-gray-400 mt-3 text-center md:text-left">* Vos données personnelles sont confidentielles et ne seront jamais partagées.</p>
+                      </div>
+                    </form>
                   </div>
                 </div>
 
@@ -349,7 +336,7 @@ export default function Contact() {
                         </div>
                         <div>
                           <p className="text-sm text-[#4c739a] dark:text-gray-400 font-medium mb-1">Téléphone</p>
-                          <a className="text-lg font-bold text-[#0d141b] dark:text-white hover:text-primary transition-colors" href="tel:+33695257352">06 95 25 73 52</a>
+                          <a className="text-lg font-bold text-[#0d141b] dark:text-white hover:text-primary transition-colors" href="tel:+33695257352" onClick={() => trackPhoneClick('contact_info_card')}>06 95 25 73 52</a>
                           <p className="text-xs text-green-600 mt-1 flex items-center gap-1 font-medium">
                             <span className="material-symbols-outlined text-[16px]">check_circle</span>
                             Disponible 7j/7
@@ -429,33 +416,6 @@ export default function Contact() {
               </div>
             </div>
           </main>
-
-          <footer className="bg-white dark:bg-[#1a2632] border-t border-gray-200 dark:border-gray-800 py-10 px-4 mt-auto">
-            <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
-              <div className="flex items-center gap-3">
-                <div className="size-8 bg-primary/10 rounded-lg flex items-center justify-center text-primary">
-                  <span className="material-symbols-outlined text-xl">cleaning_services</span>
-                </div>
-                <span className="text-[#0d141b] dark:text-white font-bold text-lg">Vidébarras</span>
-              </div>
-              <div className="flex gap-6 text-sm font-medium text-[#4c739a] dark:text-gray-400">
-                <a className="hover:text-primary transition-colors" href="#">Mentions légales</a>
-                <a className="hover:text-primary transition-colors" href="#">Politique de confidentialité</a>
-                <a className="hover:text-primary transition-colors" href="#">CGV</a>
-              </div>
-              <div className="flex gap-4">
-                <a className="text-[#4c739a] dark:text-gray-400 hover:text-primary transition-colors" href="#">
-                  <span className="hidden">Facebook</span>
-                  <svg className="w-5 h-5 fill-current" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"></path></svg>
-                </a>
-                <a className="text-[#4c739a] dark:text-gray-400 hover:text-primary transition-colors" href="#">
-                  <span className="hidden">Instagram</span>
-                  <svg className="w-5 h-5 fill-current" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"></path></svg>
-                </a>
-              </div>
-            </div>
-            <p className="text-center text-xs text-gray-400 mt-6">© 2024 Vidébarras. Tous droits réservés.</p>
-          </footer>
         </div>
       </div>
     </>

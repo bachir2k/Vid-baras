@@ -2,6 +2,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { Phone, Mail, Menu, X } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import { animate } from 'animejs';
+import { trackPhoneClick } from '../lib/analytics';
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   const location = useLocation();
@@ -85,6 +86,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
             <div className="hidden md:flex items-center space-x-6">
               <a
                 href="tel:+33695257352"
+                onClick={() => trackPhoneClick('header')}
                 className={`flex items-center space-x-2 transition-colors duration-300 ${
                   isNavSolid ? 'text-gray-700 hover:text-primary' : 'text-white hover:text-white/80'
                 }`}
@@ -121,7 +123,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                   {item.name}
                 </Link>
               ))}
-              <a href="tel:+33695257352" className="flex items-center space-x-2 text-gray-700 pt-4 border-t border-gray-100">
+              <a href="tel:+33695257352" onClick={() => trackPhoneClick('header_mobile')} className="flex items-center space-x-2 text-gray-700 pt-4 border-t border-gray-100">
                 <Phone className="h-4 w-4" />
                 <span className="text-sm font-medium">06 95 25 73 52</span>
               </a>
@@ -170,7 +172,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                 </li>
                 <li className="flex items-center space-x-3 text-gray-300">
                   <Mail className="h-5 w-5" />
-                  <span>Contact@vidédarras.fr</span>
+                  <span>contact@vidébarras.fr</span>
                 </li>
               </ul>
             </div>

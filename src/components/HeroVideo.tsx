@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import ScrollDownIndicator from './ScrollDownIndicator';
+import { trackPhoneClick } from '../lib/analytics';
 
 interface HeroVideoProps {
   videoUrl?: string;
@@ -103,7 +104,8 @@ export default function HeroVideo({
             </Link>
 
             <a
-              href="tel:0123456789"
+              href="tel:+33695257352"
+              onClick={() => trackPhoneClick('hero')}
               className="inline-flex items-center justify-center px-8 py-4 text-lg font-bold text-white bg-white/10 hover:bg-white/20 backdrop-blur-md rounded-xl border-2 border-white/30 transition-all duration-300"
             >
               <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">

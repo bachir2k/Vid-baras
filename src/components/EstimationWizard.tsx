@@ -1,6 +1,8 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { ChevronRight, ChevronLeft, Check } from 'lucide-react';
 import { supabase } from '../lib/supabase';
+import { trackEstimationSubmitted } from '../lib/analytics';
 import {
   locationSchema,
   contactInfoSchema,
@@ -21,9 +23,9 @@ interface EstimationData {
 }
 
 export default function EstimationWizard() {
+  const navigate = useNavigate();
   const [currentStep, setCurrentStep] = useState(1);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isSubmitted, setIsSubmitted] = useState(false);
   const [estimatedPrice, setEstimatedPrice] = useState('');
   const [errors, setErrors] = useState<Record<string, string>>({});
 
@@ -216,7 +218,15 @@ export default function EstimationWizard() {
         alert('Demande reçue, mais erreur d\'envoi d\'email. \n\nCause possible : domaine Resend non vérifié ou erreur de configuration. \n\nDétails techniques : ' + errorMsg);
       }
 
-      setIsSubmitted(true);
+      trackEstimationSubmitted(data.serviceType, estimatedPrice);
+      navigate('/merci', {
+        state: {
+          name: data.name,
+          serviceType: data.serviceType,
+          estimatedPrice,
+          phone: data.phone,
+        },
+      });
     } catch (error) {
       console.error('Error submitting estimation:', error);
       alert('Une erreur est survenue. Veuillez réessayer.');
@@ -570,37 +580,6 @@ export default function EstimationWizard() {
         return true;
     }
   };
-
-  if (isSubmitted) {
-    return (
-      <div className="max-w-2xl mx-auto p-8 bg-white rounded-2xl shadow-xl">
-        <div className="text-center">
-          <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
-            <Check className="w-8 h-8 text-green-600" />
-          </div>
-          <h2 className="text-3xl font-bold text-gray-900 mb-4">
-            Estimation envoyée !
-          </h2>
-          <p className="text-gray-600 mb-6">
-            Merci {data.name} pour votre demande. Nous avons bien reçu votre estimation pour un débarras de type "{data.serviceType}".
-          </p>
-          <div className="bg-blue-50 border-2 border-blue-200 rounded-xl p-6 mb-6">
-            <p className="text-sm text-gray-600 mb-2">Estimation indicative</p>
-            <p className="text-3xl font-bold text-blue-600">{estimatedPrice}</p>
-          </div>
-          <p className="text-gray-600 mb-8">
-            Un membre de notre équipe vous contactera dans les 24h au <strong>{data.phone}</strong> pour confirmer cette estimation et planifier votre intervention.
-          </p>
-          <button
-            onClick={() => window.location.reload()}
-            className="px-8 py-3 bg-blue-600 text-white rounded-xl font-semibold hover:bg-blue-700 transition-colors"
-          >
-            Faire une nouvelle estimation
-          </button>
-        </div>
-      </div>
-    );
-  }
 
   return (
     <div className="max-w-2xl mx-auto p-4 sm:p-8 bg-white rounded-2xl shadow-xl">

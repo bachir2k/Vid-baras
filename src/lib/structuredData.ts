@@ -5,8 +5,8 @@ export const localBusinessData = {
   image: 'https://images.pexels.com/photos/4246120/pexels-photo-4246120.jpeg?auto=compress&cs=tinysrgb&w=1200',
   '@id': 'https://videbarras.fr',
   url: 'https://videbarras.fr',
-  telephone: '+33769181264',
-  email: 'contact@videbarras.fr',
+  telephone: '+33695257352',
+  email: 'contact@vidébarras.fr',
   priceRange: '€€',
   aggregateRating: {
     '@type': 'AggregateRating',
